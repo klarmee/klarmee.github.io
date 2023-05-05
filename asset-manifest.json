@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/larmee/static/css/main.eaa70f4d.css",
+    "main.js": "/larmee/static/js/main.bf52a823.js",
+    "index.html": "/larmee/index.html",
+    "main.eaa70f4d.css.map": "/larmee/static/css/main.eaa70f4d.css.map",
+    "main.bf52a823.js.map": "/larmee/static/js/main.bf52a823.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.eaa70f4d.css",
+    "static/js/main.bf52a823.js"
+  ]
+}
