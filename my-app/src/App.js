@@ -13,14 +13,14 @@ export default function App() {
       {
         data.map((section, index) => {
           return (
-            <button key={index} class={onIndex === index ? 'on' : ''} onClick={() => setonIndex(index)}>
+            <button key={index} className={onIndex === index ? 'on' : ''} onClick={() => setonIndex(index)}>
               {section.name}
             </button>
           )
         })
       }
 
-      <button class={onIndex === infoIndex ? 'on' : ''} key={infoIndex} onClick={() => setonIndex(infoIndex)}>
+      <button className={onIndex === infoIndex ? 'on' : ''} key={infoIndex} onClick={() => setonIndex(infoIndex)}>
         info
       </button>
 

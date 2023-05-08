@@ -13,7 +13,7 @@ export default function ImageSection({ section, on }) {
   let imgs = []
   section.entries.forEach(entry => {
     let img = new Image()
-    img.src = window.innerWidth > bases[1].width ? bases[1].url + entry.url : bases[0].url + entry.url
+    img.src = window.innerWidth * window.devicePixelRatio > bases[0].width ? bases[1].url + entry.url : bases[0].url + entry.url
     imgs.push(img)
   });
 
@@ -35,18 +35,17 @@ export default function ImageSection({ section, on }) {
         onChange={(e) => {
           const newColumns = Math.round((100 - e.target.value) / 10)
           if (columns !== newColumns) {
-            setActivity({...activity, index: -1})
-            if (window.innerWidth - (newColumns * bases[0].width) > bases[1].width ) {
+            setActivity({ ...activity, index: -1 })
+            // if (window width > small image width)
+            if ((window.innerWidth * window.devicePixelRatio) - (newColumns * bases[0].width) > (bases[0].width)) {
               setLayout({ columns: newColumns, imgSize: 1 })
-              console.log(newColumns, layout);
-            }
-            else setLayout({ columns: newColumns, imgSize: 0 })
+            } else setLayout({ columns: newColumns, imgSize: 0 })
           }
         }}
       />
       {columns === 0 &&
         <div className="canvasWrapper">
-          <Canvas imgs={imgs} scrollStep={scrollStep} imageSize={layout.imgSize}/>
+          <Canvas imgs={imgs} scrollStep={scrollStep} imageSize={layout.imgSize} />
         </div>
       }
       {columns > 0 &&
@@ -61,7 +60,7 @@ export default function ImageSection({ section, on }) {
               return (
                 <figure key={index} style={activated ? activeStyle : {}}>
                   <img
-                  className={activated ? 'active' : ''}
+                    className={activated ? 'active' : ''}
                     width={activated ? bases[activity.level].width + 'px' : bases[layout.imgSize].width + 'px'}
                     src={activated ? bases[activity.level].url + url : bases[layout.imgSize].url + url}
                     data-original={bases[2].url + url}
