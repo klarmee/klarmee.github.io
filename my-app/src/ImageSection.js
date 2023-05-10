@@ -3,32 +3,33 @@ import { useState } from 'react';
 import Canvas from './Canvas';
 
 export default function ImageSection({ section, on }) {
-  const scrollStep = 16
   const initColumns = Math.round(4 + ((window.innerWidth - 400) / 200))
-  const initActivity = { index: -1, level: 0 }
-  const initLayout = { columns: initColumns, imgSize: 0 }
-
-  const [activity, setActivity] = useState(initActivity)
-  const [layout, setLayout] = useState(initLayout)
+  const [layout, setLayout] = useState({ columns: initColumns, imgSize: 0 })
+  const [activity, setActivity] = useState({ index: -1, level: 0 })
   let imgs = []
   section.entries.forEach(entry => {
-    let img = new Image()
-    img.src = window.innerWidth * window.devicePixelRatio > bases[0].width ? bases[1].url + entry.url : bases[0].url + entry.url
+    let img = {}
+    img.lo = new Image()
+    img.hi = new Image()
+    img.lo.src = window.innerWidth * window.devicePixelRatio > bases[0].width ? bases[1].url + entry.url : bases[0].url + entry.url
+    img.hi.src = bases[2].url + entry.url
     imgs.push(img)
   });
 
+  const scrollStep = 16
   const columns = layout.columns
   const isScrub = layout.columns === 0
-  const sectionScrubHeight = section.entries.length * scrollStep + document.documentElement.clientHeight + 'px'
-  const sectionStyle = isScrub ? { height: sectionScrubHeight } : { height: 'auto' }
-  const sectionClassName = isScrub ? section.name + ' images' + ' scrub' : section.name + ' images'
+  const scrubHeight = section.entries.length * scrollStep + document.documentElement.clientHeight + 'px'
+  const scrubStyle = isScrub ? { height: scrubHeight } : { height: 'auto' }
+  const sectionClassName = isScrub ? `${section.name} images scrub` : `${section.name} images`
   return (
     <section
       className={sectionClassName}
-      style={sectionStyle}
+      style={scrubStyle}
       tabIndex='0'
-      onKeyDown={activate}
-      onTouchStart={expand}
+      onKeyDown={(e) => {
+        if (layout.columns > 1) activate(e)
+      }}
     >
       <input type='range' step='10'
         value={100 - columns * 10}
@@ -65,8 +66,8 @@ export default function ImageSection({ section, on }) {
                     src={activated ? bases[activity.level].url + url : bases[layout.imgSize].url + url}
                     data-original={bases[2].url + url}
                     onClick={(e) => {
-                      if (activity.index !== index) activate(e, index)
-                      else if (activity.index === index && activity.level === 1) expand(e, url)
+                      if (activity.index !== index && layout.columns > 1) activate(e, index)
+                      else expand(e, url)
                     }}
                   />
                   <figcaption>{index + 1}</figcaption>
@@ -107,12 +108,12 @@ export default function ImageSection({ section, on }) {
     }
   }
 
-  function expand(e, url) {
+  function expand(e, url, index) {
     if (e.type === 'click') {
       window.open(bases[2].url + url);
     }
     else if (e.touches.length > 1) {
-      setActivity({ ...activity, level: 2 })
+      setActivity({ index: index, level: 2 })
     }
   }
 }

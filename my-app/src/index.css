@@ -27,6 +27,8 @@ nav {
 }
 
 button, input {
+  z-index: 1;
+  position: relative;
   margin: 1em .5em;
 }
 
@@ -64,7 +66,6 @@ img.active {
 }
 
 .scrub .canvasWrapper {
-  z-index: -1;
   position: fixed;
   top: 0;
   left: 0;
