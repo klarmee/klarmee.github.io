@@ -29,7 +29,7 @@ export default function Paintings() {
                         <React.Fragment key={index}>
                             <img
                                 className={isActive ? 'active' : ''}
-                                width={isActive ? bases.width[activity.level] + 'px' : bases.width[baseLevel] + 'px'}
+                                width={isActive ? bases.width[activity.level] / window.devicePixelRatio + 'px' : bases.width[baseLevel] / window.devicePixelRatio + 'px'}
                                 src={isActive ? bases.url + bases.width[activity.level] + '/' + url : bases.url + bases.width[baseLevel] + '/' + url}
                                 onClick={(e) => {
                                     if (activity.index !== index) activate(index)
@@ -51,7 +51,7 @@ export default function Paintings() {
 
     function expand(e, url, index) {
         if (e.type === 'click') {
-            window.open(bases.url + bases.width[bases.width.length - 1].url + url);
+            window.open(bases.url + 'o/' + url);
         }
         else if (e.touches.length > 1) {
             setActivity({ index: index, level: 3 })
