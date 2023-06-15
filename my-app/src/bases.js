@@ -1,6 +1,6 @@
-const bases = [
-    { width: 400, url: 'https://larmee.mo.cloudinary.net/400/' },
-    { width: 800, url: 'https://larmee.mo.cloudinary.net/800/' },
-    { width: 'original', url: 'https://res.cloudinary.com/hallhassi/image/upload/kevin/' }
-]
+const bases =
+{
+    width: [200, 400, 800, 'o'],
+    url:'https://raw.githubusercontent.com/klarmee/larmee2/main/'
+}
 export default bases 

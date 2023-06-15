@@ -1,44 +1,21 @@
 import { useState } from 'react';
-import data from './data.js';
-import TextSection from './TextSection.js';
-import ImageSection from './ImageSection.js';
-import InfoSection from './InfoSection.js';
-
+import Bio from './Bio.js';
+import Info from './Info.js';
+import Paintings from './Paintings.js';
+import Drawings from './Drawings.js';
 export default function App() {
-  const [onIndex, setonIndex] = useState(0)
-  const infoIndex = data.length
+  const [activeIndex, setactiveIndex] = useState(undefined)
+  function Link({ index, name }) {
+    return activeIndex === index ? <>{name}</> : <a onClick={() => setactiveIndex(index)} href="#">{name}</a>
+  }
   return (
     <>
-
-      {
-        data.map((section, index) => {
-          return (
-            <button key={index} className={onIndex === index ? 'on' : ''} onClick={() => setonIndex(index)}>
-              {section.name}
-            </button>
-          )
-        })
-      }
-
-      <button className={onIndex === infoIndex ? 'on' : ''} key={infoIndex} onClick={() => setonIndex(infoIndex)}>
-        info
-      </button>
-
-      {
-        data.map((section, index) => {
-          if (index === onIndex) {
-            if (section.type === 'images') {
-              return <ImageSection key={index} section={section} />
-            }
-            else {
-              return <TextSection key={index} section={section} />
-            }
-          }
-        })
-      }
-
-      {infoIndex === onIndex && <InfoSection />}
-
+      <Link index="0" name="Kevin Larmee" /> <Link index="1" name="paintings" /> <Link index="2" name="drawings" /> {(activeIndex == 1 || activeIndex == 3) && <Link index="3" name="info" />}
+      <hr/>
+      {(activeIndex == 0) && <Bio />}
+      {(activeIndex == 1) && <Paintings />}
+      {(activeIndex == 2) && <Drawings />}
+      {(activeIndex == 3) && <Info />}
     </>
   )
 }

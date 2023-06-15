@@ -1,21 +1,46 @@
+* {
+  user-select: none;
+}
+
+:root {
+  --columns: 8;
+}
+
+body, figure {
+  margin: 0;
+}
+
+body::-webkit-scrollbar {
+  width: 0;
+}
+
 body {
-  font-size: 1.25em;
+  text-align: center;
+  background-color: black;
+  color: white;
 }
 
-a {
-  text-decoration: none;
-}
 
-a,
-input {
+
+button, input {
   z-index: 1;
   position: relative;
 }
 
-pre {
-  width: 100%;
-  overflow: scroll;
+button {
+  padding: 1em;
+  background-color: black;
+  border: none;
 }
+
+input {
+  padding: 1em 0;
+}
+
+button.on {
+  color: red;
+}
+
 
 section {
   margin-bottom: 1em;
@@ -49,6 +74,14 @@ img.active {
 canvas {
   max-height: 100vh;
   max-width: 100vw;
+}
+
+ul, ol {
+  text-align: left;
+  padding-inline: 1em;
+  list-style: none;
+  margin: auto;
+  max-width: 60ch;
 }
 
 figcaption {
