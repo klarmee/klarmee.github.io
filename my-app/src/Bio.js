@@ -1,6 +1,6 @@
 export default function Bio(){
     return (
-    <pre>EXHIBITIONS<br/>
+    <pre>- EXHIBITIONS<br/>
 <a href="https://www.stations.zone/nice-breeze-blowing-all-smoke-our-faces/">2020, 2 Person Show, Stations, Berlin</a><br/>
 2002, Group Show, Thomas Masters Gallery, Chicago<br/>
 2000, Group Show, Eastwick Gallery, Chicago<br/>
@@ -41,11 +41,11 @@ export default function Bio(){
 1984, "Gorilla Show II", Avenue B Gallery, New York<br/>
 1984, Group Show, Fashion Moda, New York<br/>
 1984, Group Show, White Columns, New York<br/>
-<br/>
+- 
 STAGESETS<br/>
 "At the Sound of the Beep", Colonade Theater, NYC<br/>
 "Champagne", La Mama ETC, New York<br/>
-<br/>
+- 
 BIBLIOGRAPHY<br/>
 Chicago Tribune, Gallerywatch, Barbara Buchholz, 4/18/97<br/>
 Pulp Magazine, "Larmee", Stephanie Arena, Aug. 1990<br/>
@@ -70,14 +70,14 @@ New York Native, "Champagne", 1/85<br/>
 Stroll, "Towards a Street Aesthetic", Thomasin Lansing, Spring/Summer '85<br/>
 San Francisco Bay Guardian, "Trendy Artists...", Myriam Weisang, 5/22/85<br/>
 Columbia, "Art on New York", Rex Roberts, 10/85<br/>
-<br/>
+- 
 BOOKS AND CATALOGUES<br/>
 1986, Eight Urban Painters, Fine Arts Center Art Gallery, SUNY at Stonybrook<br/>
 1985, Public and Private, American Prints Today, The Brooklyn Museum, Brooklyn, New York<br/>
 GRANTS<br/>
 1991, Chicago Department of Cultural Affairs<br/>
 1986, Recipient, Pollack-Krasner Award<br/>
-<br/>
+- 
 COLLECTIONS<br/>
 Chemical Bank<br/>
 Toledo Museum of Art<br/>
@@ -85,6 +85,8 @@ Grand Rapids Art Museum<br/>
 Brooklyn Museum of Art<br/>
 Kentucky University Museum<br/>
 Indianapolis Museum of Art<br/>
-The Paterson Museum
+The Paterson Museum<br/>
+- <a href="mailto:kevinlarmee@hotmail.com">email</a><br/>
+- site by <a href="blaiselarmee.com">blaise</a>
 </pre>
 )}

@@ -9,48 +9,58 @@ export default function Canvas({ imgs, scrollStep }) {
         const canvas = canvasRef.current
         const context = canvas.getContext('2d')
 
-        window.addEventListener('scroll', onScrub, { passive: true });
-        window.dispatchEvent(new CustomEvent('scroll')) // render image before scroll begins
+        i.current.onload = function() { // initial image before scroll
+            setSize(i.current)
+            context.drawImage(i.current, 0, 0, i.current.naturalWidth, i.current.naturalHeight)
+        }
 
+        window.addEventListener('scroll', onScrub, { passive: true });
         return () => window.removeEventListener('scroll', onScrub);
 
         function onScrub() {
             i.current = imgs[parseInt(Math.floor(window.scrollY / scrollStep))]
             if (i.current !== undefined) {
-                // 1. size   2. draw
-                setSize(i.current.lo)
-                context.drawImage(i.current.lo, 0, 0, i.current.lo.naturalWidth, i.current.lo.naturalHeight)
+                setSize(i.current)
+                context.drawImage(i.current, 0, 0, i.current.naturalWidth, i.current.naturalHeight)
+                document.querySelector('.output').innerHTML = parseInt(Math.floor(window.scrollY / scrollStep)) + 1
             }
-            window.addEventListener('click', onClick);
-            window.visualViewport.addEventListener('resize', onResize)
+            window.addEventListener('wheel', onZoom);
+            window.addEventListener('touchstart', onZoom);
+            window.addEventListener('touchmove', onZoom);
         }
 
-        function setSize(i) {
-            document.querySelector('canvas').width = i.naturalWidth
-            document.querySelector('canvas').height = i.naturalHeight
-        }
-
-        function onClick(e) {
-            if (e.target.tagName === 'CANVAS') {
-                window.open(i.current.hi.src);
+        function onZoom(e) {
+            if (window.visualViewport.scale > 1 || (e.touches && e.touches.length == 2)) {
+                let img = new Image()
+                img.src = i.current.hi
+                img.onload = function () {
+                    setSize(img)
+                    context.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight)
+                }
+                window.addEventListener('wheel', onReset);
+                window.addEventListener('touchend', onReset);
+                window.removeEventListener('scroll', onScrub)
+                window.removeEventListener('wheel', onZoom);
+                window.addEventListener('touchstart', onZoom);
+                window.removeEventListener('touchmove', onZoom);
             }
         }
 
-        function onResize() {
-            if (window.visualViewport.scale > 1) {
-                window.removeEventListener('scroll', onScrub, { passive: true });
-                window.removeEventListener('click', onClick);
-                setSize(i.current.hi)
-                context.drawImage(i.current.hi, 0, 0, i.current.hi.naturalWidth, i.current.hi.naturalHeight)
-            }
-            else {
+        function onReset() {
+            if (window.visualViewport.scale == 1) {
                 window.addEventListener('scroll', onScrub, { passive: true });
-                window.addEventListener('click', onClick);
-                setSize(i.current.lo)
-                context.drawImage(i.current.lo, 0, 0, i.current.lo.naturalWidth, i.current.lo.naturalHeight)
+                window.removeEventListener('wheel', onReset);
+                window.removeEventListener('touchend', onReset);
             }
         }
+
     }, [])
 
-    return <canvas ref={canvasRef} />
+    function setSize(i) {
+        document.querySelector('.canvas').width = i.naturalWidth
+        document.querySelector('.canvas').height = i.naturalHeight
+    }
+
+    return <canvas className="canvas" ref={canvasRef} />
+
 }

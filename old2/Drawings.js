@@ -2,7 +2,7 @@ import bases from './bases.js'
 import React, { useState, useEffect } from 'react';
 import { drawingData } from './drawingData.js';
 
-export default function Paintings() {
+export default function Drawings() {
     const baseLevel = window.innerWidth < 620 ? 0 : 1
     const [activity, setActivity] = useState({ index: -1, level: baseLevel })
     useEffect(() => {
@@ -25,7 +25,7 @@ export default function Paintings() {
                         <React.Fragment key={index}>
                             <img
                                 className={isActive ? 'active' : ''}
-                                width={isActive ? bases.width[activity.level] / window.devicePixelRatio + 'px' : bases.width[baseLevel] / window.devicePixelRatio + 'px'}
+                                width={isActive ? bases.width[baseLevel + 1] / window.devicePixelRatio + 'px' : bases.width[baseLevel] / window.devicePixelRatio + 'px'}
                                 src={isActive ? bases.url + bases.width[activity.level] + '/' + url : bases.url + bases.width[baseLevel] + '/' + url}
                                 onClick={(e) => {
                                     if (activity.index !== index) activate(index)
