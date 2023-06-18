@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/larmee/static/css/main.ce1111f6.css",
-    "main.js": "/larmee/static/js/main.5bd1e5d2.js",
+    "main.css": "/larmee/static/css/main.a9307108.css",
+    "main.js": "/larmee/static/js/main.e0ece63c.js",
     "index.html": "/larmee/index.html",
-    "main.ce1111f6.css.map": "/larmee/static/css/main.ce1111f6.css.map",
-    "main.5bd1e5d2.js.map": "/larmee/static/js/main.5bd1e5d2.js.map"
+    "main.a9307108.css.map": "/larmee/static/css/main.a9307108.css.map",
+    "main.e0ece63c.js.map": "/larmee/static/js/main.e0ece63c.js.map"
   },
   "entrypoints": [
-    "static/css/main.ce1111f6.css",
-    "static/js/main.5bd1e5d2.js"
+    "static/css/main.a9307108.css",
+    "static/js/main.e0ece63c.js"
   ]
 }
