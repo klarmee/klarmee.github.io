@@ -1,7 +1,6 @@
 import stations from './stations.jpg'
 export default function Bio(){
     return (
-        
     <pre>
 b 1946 <br/><br/>
 <a href="https://www.stations.zone/nice-breeze-blowing-all-smoke-our-faces/">2020, Exhibition w/ Nelson Sullivan, Stations, Berlin</a> <br/>
@@ -57,6 +56,13 @@ Elle, "The Art of Innocence", Carter Ratcliff, Feb. <br/>
 La Stampa, "Ma La Scapigliatura Ingrassa Il Business", Enrico Baj, 3/28/86 <br/>
 Arts Magazine, "Kevin Larmee", Matthew Rose, 5/86 <br/>
 Tokyo Journal, "New York, New York', G. Fehling, 2/86 <br/>
+<a href="https://raw.githubusercontent.com/klarmee/larmee2/main/o/hiroko0.jpg"><img src="https://raw.githubusercontent.com/klarmee/larmee2/main/800/hiroko0.jpg"/></a>
+<a href="https://raw.githubusercontent.com/klarmee/larmee2/main/o/hiroko1.jpg"><img src="https://raw.githubusercontent.com/klarmee/larmee2/main/800/hiroko1.jpg"/></a>
+<a href="https://raw.githubusercontent.com/klarmee/larmee2/main/o/hiroko2.jpg"><img src="https://raw.githubusercontent.com/klarmee/larmee2/main/800/hiroko2.jpg"/></a>
+<a href="https://raw.githubusercontent.com/klarmee/larmee2/main/o/hiroko3.jpg"><img src="https://raw.githubusercontent.com/klarmee/larmee2/main/800/hiroko3.jpg"/></a>
+<a href="https://raw.githubusercontent.com/klarmee/larmee2/main/o/hiroko4.jpg"><img src="https://raw.githubusercontent.com/klarmee/larmee2/main/800/hiroko4.jpg"/></a>
+<a href="https://raw.githubusercontent.com/klarmee/larmee2/main/o/hiroko5.jpg"><img src="https://raw.githubusercontent.com/klarmee/larmee2/main/800/hiroko5.jpg"/></a>
+<a href="https://raw.githubusercontent.com/klarmee/larmee2/main/o/hiroko6.jpg"><img src="https://raw.githubusercontent.com/klarmee/larmee2/main/800/hiroko6.jpg"/></a><br/>
 108 East Village, Review, 10/86 <br/>
 Stony Brook People, Rhonda Cooper, 7/86 <br/>
 The Village Times, "Color, Detail, Theme Court Attention...", Susan Bridson, 7/24/86 <br/>
@@ -65,11 +71,13 @@ Newsday, "A Touch of the Bizarre...", Karin Lipson, 7/16/86 <br/>
 The Columbus Dispatch, "Divergent Lancaster...", Jacqueline Hall, 7/20/86 <br/>
 The Mountain Times, "Landscape Invitational", 7/3/86 <br/>
 The New York Times, "Urban Anxieties Reflected...", Helen Harrison, 8/17/86 <br/>
+<a href="https://raw.githubusercontent.com/klarmee/larmee2/main/o/new-york-times.jpg"><img src="https://raw.githubusercontent.com/klarmee/larmee2/main/800/new-york-times.jpg"/></a><br/>
 Manhattan Arts, "Confessions of An Ex-Muralist", Edward Rubin, 7/86 <br/>
 East Village Eye, "Luminescence Through Darkness", Lynn Snowden, 11/85 <br/>
 New Art Examiner, "Contemporary Visions", Margot McMahon, 10/85 <br/>
 New York Daily News, "Urban Artifacts", Jonathan Mandell, 8/18/85 <br/>
 East Informer, "Larmee: In From the Street", James Sheehan, 10/85 <br/>
+<a href="https://raw.githubusercontent.com/klarmee/larmee2/main/o/east-village-magazine.jpg"><img src="https://raw.githubusercontent.com/klarmee/larmee2/main/800/east-village-magazine.jpg"/></a><br/>
 New York Native, "Champagne", 1/85 <br/>
 Stroll, "Towards a Street Aesthetic", Thomasin Lansing, Spring/Summer '85 <br/>
 San Francisco Bay Guardian, "Trendy Artists...", Myriam Weisang, 5/22/85 <br/>
@@ -94,6 +102,6 @@ The Paterson Museum <br/><br/>
 
 <a href="mailto:info@larmee.org">info@larmee.org</a> 
 <br/>
-site by <a href="blaiselarmee.com">blaise</a>
+site by <a href="https://blaiselarmee.com">blaise</a>
 </pre>
 )}
