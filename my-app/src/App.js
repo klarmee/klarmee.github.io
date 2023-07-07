@@ -27,6 +27,12 @@ export default function App() {
   }
   function ImageSection(name) {
     const data = name.name == 'paintings' ? paintingData.map(a => a.url) : drawingData
-    return mobile ? <MobileImageSection data={data} /> : <DesktopImageSection data={data} />;
+    let imgs = []
+    data.forEach((src) => {
+      let img = new Image()
+      img.src = src
+      imgs.push(img)  
+    })    
+    return mobile ? <MobileImageSection data={imgs} /> : <DesktopImageSection data={imgs} />;
   }
 }

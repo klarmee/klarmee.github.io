@@ -1,7 +1,6 @@
 import { useRef, useEffect } from 'react'
 
 export default function Canvas({ imgs, scrollStep }) {
-
     const i = useRef(imgs[0])
     const canvasRef = useRef(null)
 
@@ -9,7 +8,7 @@ export default function Canvas({ imgs, scrollStep }) {
         const canvas = canvasRef.current
         const context = canvas.getContext('2d')
 
-        i.current.onload = function() { // initial image before scroll
+        i.current.onload = function () { // initial image before scroll
             setSize(i.current)
             context.drawImage(i.current, 0, 0, i.current.naturalWidth, i.current.naturalHeight)
         }
@@ -24,33 +23,27 @@ export default function Canvas({ imgs, scrollStep }) {
                 context.drawImage(i.current, 0, 0, i.current.naturalWidth, i.current.naturalHeight)
                 document.querySelector('.output').innerHTML = parseInt(Math.floor(window.scrollY / scrollStep)) + 1
             }
-            window.addEventListener('wheel', onZoom);
-            window.addEventListener('touchstart', onZoom);
-            window.addEventListener('touchmove', onZoom);
+            ['wheel', 'touchstart', 'touchmove'].forEach((event) => window.addEventListener(event, onZoom))
         }
 
         function onZoom(e) {
-            if (window.visualViewport.scale > 1 || (e.touches && e.touches.length == 2)) {
+            if (window.visualViewport.scale > 1 || (e.touches && e.touches.length === 2)) {
                 let img = new Image()
                 img.src = i.current.hi
                 img.onload = function () {
                     setSize(img)
                     context.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight)
                 }
-                window.addEventListener('wheel', onReset);
-                window.addEventListener('touchend', onReset);
                 window.removeEventListener('scroll', onScrub)
-                window.removeEventListener('wheel', onZoom);
-                window.addEventListener('touchstart', onZoom);
-                window.removeEventListener('touchmove', onZoom);
+                ['wheel', 'touchstart', 'touchmove'].forEach((event) => window.removeEventListener(event, onZoom))
+                ['wheel', 'touchend'].forEach((event) => window.addEventListener(event, onReset))
             }
         }
 
         function onReset() {
-            if (window.visualViewport.scale == 1) {
+            if (window.visualViewport.scale === 1) {
+                ['wheel', 'touchend'].forEach((event) => window.removeEventListener(event, onReset))
                 window.addEventListener('scroll', onScrub, { passive: true });
-                window.removeEventListener('wheel', onReset);
-                window.removeEventListener('touchend', onReset);
             }
         }
 

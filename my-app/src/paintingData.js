@@ -546,7 +546,7 @@ let pre = ''
 paintingData.map((entry, index) => {
     pre += `${(index + 1).toString()}. `
     Object.entries(entry).map(([key, value]) => {
-        if (key !== 'url') pre += `${value} `
+        if (key !== 'url') pre += key == 'dimensions' ? `${value} ` : `${value}, `
     })
     pre += `\n`
 })
