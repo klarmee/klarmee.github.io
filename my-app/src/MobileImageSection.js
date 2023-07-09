@@ -31,32 +31,32 @@ function Canvas({ imgs, scrollStep }) {
         return () => window.removeEventListener('scroll', onScrub);
 
         function onScrub() {
+            window.addEventListener('touchmove', onZoom)
             i.current = imgs[parseInt(Math.floor(window.scrollY / scrollStep))]
             if (i.current !== undefined) {
                 setSize(i.current)
                 context.drawImage(i.current, 0, 0, i.current.naturalWidth, i.current.naturalHeight)
                 document.querySelector('.output').innerHTML = parseInt(Math.floor(window.scrollY / scrollStep)) + 1
             }
-            ['wheel', 'touchstart', 'touchmove'].forEach((event) => window.addEventListener(event, onZoom))
         }
 
-        function onZoom(e) {
-            if (window.visualViewport.scale > 1 || (e.touches && e.touches.length === 2)) {
+        function onZoom() {
+            if (window.visualViewport.scale > 1) {
+                window.removeEventListener('scroll', onScrub)
+                window.removeEventListener('touchmove', onZoom)
+                window.addEventListener('touchmove', onReset)
                 let img = new Image()
-                img.src = i.current.hi
+                img.src = i.current.o
                 img.onload = function () {
                     setSize(img)
                     context.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight)
                 }
-                window.removeEventListener('scroll', onScrub)
-                ['wheel', 'touchstart', 'touchmove'].forEach((event) => window.removeEventListener(event, onZoom))
-                ['wheel', 'touchend'].forEach((event) => window.addEventListener(event, onReset))
             }
         }
 
         function onReset() {
             if (window.visualViewport.scale === 1) {
-                ['wheel', 'touchend'].forEach((event) => window.removeEventListener(event, onReset))
+                window.removeEventListener('touchmove', onReset)
                 window.addEventListener('scroll', onScrub, { passive: true });
             }
         }

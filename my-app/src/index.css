@@ -4,10 +4,7 @@ body {
 
 pre {
   all: unset;
-}
-
-pre {
-white-space: pre-wrap;
+  white-space: pre-wrap;
 }
 
 img {

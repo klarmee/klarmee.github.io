@@ -36,14 +36,14 @@ export default function Canvas({ imgs, scrollStep }) {
                 }
                 window.removeEventListener('scroll', onScrub)
                 ['wheel', 'touchstart', 'touchmove'].forEach((event) => window.removeEventListener(event, onZoom))
-                ['wheel', 'touchend'].forEach((event) => window.addEventListener(event, onReset))
+                ['wheel', 'touchmove', 'touchend'].forEach((event) => window.addEventListener(event, onReset))
             }
         }
 
         function onReset() {
-            if (window.visualViewport.scale === 1) {
-                ['wheel', 'touchend'].forEach((event) => window.removeEventListener(event, onReset))
+            if (window.visualViewport.scale <= 1) {
                 window.addEventListener('scroll', onScrub, { passive: true });
+                ['wheel', 'touchmove', 'touchend'].forEach((event) => window.removeEventListener(event, onReset))
             }
         }
 
