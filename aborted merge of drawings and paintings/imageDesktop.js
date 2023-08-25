@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-export default function DesktopImageSection({ imgs, gallery }) {
+export default function ImageDesktop({ imgs }) {
     const [activeIndex, activateIndex] = useState(-1)
     useEffect(() => {
         let imgs = document.querySelectorAll('img')
@@ -21,9 +21,7 @@ export default function DesktopImageSection({ imgs, gallery }) {
                     src={active ? img.max : img.min}
                     style={active ? activestyle : {}}
                     onClick={(e) => { active ? expand(e, img.o) : activateIndex(index) }}
-                />
-                {gallery == "paintings" ? index + 1 : ''}
-                
+                />                
             </Fragment >
         )
     })
