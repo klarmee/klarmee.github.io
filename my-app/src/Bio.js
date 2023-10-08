@@ -7,6 +7,7 @@ export default function Bio() {
         <>
             <a href="mailto:info@larmee.org">info@larmee.org</a>
             <br />b 1946 <br /><br />
+            <a target="_blank" href="https://apartment.gallery">2023, Exhibition w/ Vogel Morra, Apartment Gallery, Chicago</a> <br />
             <a target="_blank" href="https://www.stations.zone/nice-breeze-blowing-all-smoke-our-faces/">2020, Exhibition w/ Nelson Sullivan, Stations, Berlin</a> <br />
             <Img src={'stations.jpg'} /> <br />
             2002, Group Show, Thomas Masters Gallery, Chicago <br />
