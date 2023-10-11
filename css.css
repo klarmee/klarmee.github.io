@@ -16,6 +16,10 @@ nav, .scrubinfo {
   padding: 10px 0;
 }
 
+a {
+  color: black;
+}
+
 pre {
   white-space: pre-wrap;
 }
