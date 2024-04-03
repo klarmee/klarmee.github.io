@@ -37,6 +37,7 @@ function handleScroll() {
     img = Array.from(document.querySelectorAll('img'));
     img.forEach(el => el.classList.remove('on'))
     if (!turnedOff) { // if canvas is not turned off
+        canvaswrapper.hidden = false
         y = document.body.getBoundingClientRect().height - (window.innerHeight)
         i = Math.min(Math.round(window.scrollY * img.length / y), img.length - 1);
         requestAnimationFrame(() => {
