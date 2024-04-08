@@ -1,22 +1,33 @@
 let img = Array.from(document.querySelectorAll('img'));
 let i, y // current index of images, height of document body
-let turnedOff = false 
+let turnedOff = false
 
 window.addEventListener('scroll', handleScroll, { passive: true });
 window.addEventListener('touchmove', zoomIn)
 window.addEventListener('wheel', zoomIn)
 
+// add 'loaded' attribute
 // show canvas
 img.forEach((el, index) => {
+    if (el.complete) {
+        el.setAttribute('loaded', true)
+    }
+    else {
+        el.addEventListener('load', (e) => {
+            e.target.setAttribute('loaded', true)
+        })
+    }
     el.addEventListener('click', (e) => {
-        y = document.body.getBoundingClientRect().height - (window.innerHeight)
-        img[index].classList.add('on')
-        turnedOff = false
-        canvaswrapper.hidden = false
-        if (typeof info !== 'undefined') {
-            info.hidden = false
+        if (e.target.getAttribute('loaded')) {
+            y = document.body.offsetHeight - document.body.clientHeight
+            img[index].classList.add('on')
+            turnedOff = false
+            canvaswrapper.hidden = false
+            if (typeof info !== 'undefined') {
+                info.hidden = false
+            }
+            scrollTo(0, Math.max(y * index / img.length, 1))
         }
-        scrollTo(0, Math.max(y * index / img.length, 1))
     })
 })
 
@@ -34,22 +45,29 @@ canvaswrapper.addEventListener('click', (e) => {
 
 // scroll
 function handleScroll() {
-    img = Array.from(document.querySelectorAll('img'));
     img.forEach(el => el.classList.remove('on'))
     if (!turnedOff) { // if canvas is not turned off
-        canvaswrapper.hidden = false
-        y = document.body.getBoundingClientRect().height - (window.innerHeight)
-        i = Math.min(Math.round(window.scrollY * img.length / y), img.length - 1);
         requestAnimationFrame(() => {
-            canvas.width = img[i].naturalWidth;
-            canvas.height = img[i].naturalHeight;
-            canvas.getContext("2d").drawImage(img[i], 0, 0, img[i].naturalWidth, img[i].naturalHeight);
-            img[i].classList.add('on')
-            canvas.parentElement.href = img[i].parentElement.href
-            if (typeof info !== 'undefined') {
-                info.hidden = false
-                info.href = `info.html#a${i+1}`
-                info.innerHTML = i + 1
+            y = document.body.offsetHeight - document.body.clientHeight
+            i = Math.min(Math.round(window.scrollY * img.length / y), img.length - 1);
+            if (img[i].getAttribute('loaded') == 'true') {
+                canvas.width = img[i].naturalWidth;
+                canvas.height = img[i].naturalHeight;
+                canvas.getContext("2d").drawImage(img[i], 0, 0, img[i].naturalWidth, img[i].naturalHeight);
+                img[i].classList.add('on')
+                canvas.parentElement.href = img[i].parentElement.href
+                canvaswrapper.hidden = false
+                if (typeof info !== 'undefined') {
+                    info.hidden = false
+                    info.href = `info.html#a${i + 1}`
+                    info.innerHTML = i + 1
+                }
+            }
+            else {
+                canvaswrapper.hidden = true
+                if (typeof info !== 'undefined') {
+                    info.hidden = true
+                }
             }
         })
     }
@@ -97,10 +115,19 @@ window.addEventListener('keydown', (e) => {
     if (e.key == 'ArrowRight') scrollBy(0, y / img.length)
     else if (e.key == 'ArrowLeft') scrollBy(0, -y / img.length)
     else if (e.key == 'Escape') {
-        canvaswrapper.hidden = canvaswrapper.hidden == true ? false : true
-        turnedOff = true
-        if (typeof info !== 'undefined') {
-            info.hidden = canvaswrapper.hidden == true ? true : false
+        if (canvaswrapper.hidden) {
+            canvaswrapper.hidden = false
+            turnedOff = false
+            if (typeof info !== 'undefined') {
+                info.hidden = false
+            }
+        }
+        else {
+            canvaswrapper.hidden = true
+            turnedOff = true
+            if (typeof info !== 'undefined') {
+                info.hidden = true
+            }
         }
     }
 })
