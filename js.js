@@ -67,10 +67,6 @@ window.onclick = (e) => {
     if (e.target !== scrubber && e.target.tagName !== 'IMG') scrubber.hidden = true
 }
 
-window.ontouchstart = (e) => {
-    if (e.target !== scrubber && e.target.tagName !== 'IMG') scrubber.hidden = true
-}
-
 function toggleScrubbing() {
     scrubber.hidden = scrubber.hidden == true ? false : true
 }
