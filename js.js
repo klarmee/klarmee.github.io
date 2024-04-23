@@ -15,12 +15,14 @@ window.onscroll = onscrub
 
 function onscrub() {
     if (img().complete) {
-        scrubber.width = img().naturalWidth
-        scrubber.height = img().naturalHeight
-        scrubber.getContext("2d").drawImage(img(), 0, 0, img().naturalWidth, img().naturalHeight)
-        scrubber.onclick = function(){window.open(img().parentElement.href)}
-        window.ontouchmove = onzoom
-        window.onwheel = onzoom
+        requestAnimationFrame(() => {
+            scrubber.width = img().naturalWidth
+            scrubber.height = img().naturalHeight
+            scrubber.getContext("2d").drawImage(img(), 0, 0, img().naturalWidth, img().naturalHeight)
+            scrubber.onclick = function(){window.open(img().parentElement.href)}
+            window.ontouchmove = onzoom
+            window.onwheel = onzoom
+        })
     }
 }
 
@@ -62,7 +64,10 @@ window.addEventListener('keydown', (e) => {
 })
 
 window.onclick = (e) => {
-    console.log(e.target);
+    if (e.target !== scrubber && e.target.tagName !== 'IMG') scrubber.hidden = true
+}
+
+window.ontouchstart = (e) => {
     if (e.target !== scrubber && e.target.tagName !== 'IMG') scrubber.hidden = true
 }
 
