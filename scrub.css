@@ -25,3 +25,8 @@ img {
       max-height: 24vw;
   }
 }
+
+*[hidden] {
+  display: none;
+  visibility: hidden;
+}
