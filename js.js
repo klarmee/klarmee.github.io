@@ -20,6 +20,7 @@ function onscrub() {
             scrubber.height = img().naturalHeight
             scrubber.getContext("2d").drawImage(img(), 0, 0, img().naturalWidth, img().naturalHeight)
             scrubber.onclick = function(){window.open(img().parentElement.href)}
+            window.ontouchstart = onzoom
             window.ontouchmove = onzoom
             window.onwheel = onzoom
         })
@@ -27,7 +28,7 @@ function onscrub() {
 }
 
 function onzoom(e) {
-    if (window.visualViewport.scale > 1 || (e.touches !== undefined && e.touches.length > 1)) {
+    if (window.visualViewport.scale !== 1 || (e.touches !== undefined && e.touches.length > 1)) {
         let hiRes
         hiRes = new Image()
         hiRes.src = img().src.replace('/800/', '/o/')
