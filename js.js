@@ -27,6 +27,7 @@ function onscrub() {
 
 function onzoom(e) {
     if (window.visualViewport.scale > 1 || (e.touches !== undefined && e.touches.length > 1)) {
+        console.log("zoom");
         let hiRes
         hiRes = new Image()
         hiRes.src = img().src.replace('/800/', '/o/')
@@ -42,15 +43,17 @@ function onzoom(e) {
     }
 }
 
-function onzoomreset(e) {
+function onzoomreset() {
     if (window.visualViewport.scale === 1) {
+        console.log("reset " + window.visualViewport.scale );
         scrubber.width = img().naturalWidth
         scrubber.height = img().naturalHeight
         scrubber.style.height = ''
         scrubber.style.width = ''
         scrubber.getContext("2d").drawImage(img(), 0, 0, img().naturalWidth, img().naturalHeight)
+        window.ontouchend = null
         window.onscroll = onscrub
-        window.ontouchend = window.onwheel = null
+        window.ontouchmove = window.onwheel = onzoom
     }
 }
 
