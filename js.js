@@ -39,12 +39,13 @@ function onzoom(e) {
             scrubber.getContext("2d").drawImage(hiRes, 0, 0, hiRes.naturalWidth, hiRes.naturalHeight)
         }
         window.onscroll = null
-        window.ontouchmove = onzoomreset
+        window.ontouchmove = null
+        window.ontouchend = onzoomreset
         window.onwheel = onzoomreset
     }
 }
 
-function onzoomreset() {
+function onzoomreset(e) {
     if (window.visualViewport.scale === 1) {
         scrubber.width = img().naturalWidth
         scrubber.height = img().naturalHeight
@@ -52,7 +53,7 @@ function onzoomreset() {
         scrubber.style.width = ''
         scrubber.getContext("2d").drawImage(img(), 0, 0, img().naturalWidth, img().naturalHeight)
         window.onscroll = onscrub
-        window.ontouchmove = null
+        window.ontouchend = null
         window.onwheel = null
     }
 }
