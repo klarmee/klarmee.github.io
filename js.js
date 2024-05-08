@@ -27,7 +27,7 @@ function onscrub() {
 }
 
 function onzoom(e) {
-    if (window.visualViewport.scale > 1 || typeof e.touches !== "undefined" && e.touches.length > 1) {
+    if (window.visualViewport.scale > 1 || (typeof e.touches !== undefined && e.touches.length > 1)) {
         let hiRes
         hiRes = new Image()
         hiRes.src = img().src.replace('/800/', '/o/')
