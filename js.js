@@ -26,8 +26,8 @@ function onscrub() {
     }
 }
 
-function onzoom() {
-    if (window.visualViewport.scale > 1) {
+function onzoom(e) {
+    if (window.visualViewport.scale > 1 || typeof e.touches !== "undefined" && e.touches.length > 1) {
         let hiRes
         hiRes = new Image()
         hiRes.src = img().src.replace('/800/', '/o/')
@@ -63,7 +63,7 @@ window.addEventListener('keydown', (e) => {
     else if (e.key == 'Escape') toggleScrubbing()
 })
 
-window.onclick = (e) => {
+wrapper.onclick = (e) => {
     if (e.target !== scrubber && e.target.tagName !== 'IMG') wrapper.hidden = true
 }
 
