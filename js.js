@@ -6,7 +6,7 @@ const img = function(){return imgs[i()]}
 imgs.forEach((img, i) => {
     img.onclick = (e) => {
         e.preventDefault()
-        scrubber.hidden = false
+        wrapper.hidden = false
         scrollTo(0, Math.max(y() * i / imgs.length, 1))
     }
 })
@@ -64,9 +64,9 @@ window.addEventListener('keydown', (e) => {
 })
 
 window.onclick = (e) => {
-    if (e.target !== scrubber && e.target.tagName !== 'IMG') scrubber.hidden = true
+    if (e.target !== scrubber && e.target.tagName !== 'IMG') wrapper.hidden = true
 }
 
 function toggleScrubbing() {
-    scrubber.hidden = scrubber.hidden == true ? false : true
+    wrapper.hidden = wrapper.hidden == true ? false : true
 }
