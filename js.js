@@ -2,11 +2,12 @@ const y = function(){return document.body.offsetHeight - document.body.clientHei
 const i = function(){return Math.min(Math.round(window.scrollY * imgs.length / y()), imgs.length - 1)}
 const imgs = Array.from(document.querySelectorAll('img'))
 const img = function(){return imgs[i()]}
+let scrubberDisabled = false
 
 imgs.forEach((img, i) => {
     img.onclick = (e) => {
         e.preventDefault()
-        wrapper.hidden = false
+        scrubberDisabled = wrapper.hidden = false
         scrollTo(0, Math.max(y() * i / imgs.length, 1))
     }
 })
@@ -14,7 +15,8 @@ imgs.forEach((img, i) => {
 window.onscroll = onscrub
 
 function onscrub() {
-    if (img().complete) {
+    if (img().complete && !scrubberDisabled) {
+        wrapper.hidden = false
         requestAnimationFrame(() => {
             scrubber.width = img().naturalWidth
             scrubber.height = img().naturalHeight
@@ -60,13 +62,13 @@ function onzoomreset() {
 window.addEventListener('keydown', (e) => {
     if (e.key == 'ArrowRight') scrollBy(0, y() / imgs.length)
     else if (e.key == 'ArrowLeft') scrollBy(0, -y() / imgs.length)
-    else if (e.key == 'Escape') toggleScrubbing()
+    else if (e.key == 'Escape') {
+        scrubberDisabled = wrapper.hidden = true
+    }
 })
 
 wrapper.onclick = (e) => {
-    if (e.target !== scrubber && e.target.tagName !== 'IMG') wrapper.hidden = true
-}
-
-function toggleScrubbing() {
-    wrapper.hidden = wrapper.hidden == true ? false : true
+    if (e.target !== scrubber && e.target.tagName !== 'IMG') {
+        scrubberDisabled = wrapper.hidden = true
+    }
 }
