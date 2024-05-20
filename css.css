@@ -1,3 +1,4 @@
-a{text-decoration:none;}
+body{background:red;}
+a{color:white;}
 ul,ol{padding:0 0 0 1em;list-style-position: inside;}
 ul{list-style:none;}
