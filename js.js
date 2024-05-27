@@ -15,15 +15,25 @@ imgs.forEach((img, i) => {
 window.onscroll = onscrub
 
 function onscrub() {
-    if (img().complete && !scrubberDisabled) {
+    // if the user hasn't disabled our scrubber,
+    if (!scrubberDisabled) {
+        // then show it.
         wrapper.hidden = false
-        requestAnimationFrame(() => {
-            scrubber.width = img().naturalWidth
-            scrubber.height = img().naturalHeight
-            scrubber.getContext("2d").drawImage(img(), 0, 0, img().naturalWidth, img().naturalHeight)
-            scrubber.onclick = function(){window.open(img().parentElement.href)}
-            window.ontouchmove = window.onwheel = onzoom
-        })
+        // draw image if ready--
+        if (img().complete) {
+            requestAnimationFrame(() => {
+                scrubber.width = img().naturalWidth
+                scrubber.height = img().naturalHeight
+                scrubber.getContext("2d").drawImage(img(), 0, 0, img().naturalWidth, img().naturalHeight)
+                scrubber.onclick = function(){window.open(img().parentElement.href)}
+                window.ontouchmove = window.onwheel = onzoom
+            })
+        // otherwise clear rectangle.
+        } else {
+            requestAnimationFrame(() => {
+                scrubber.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+            })
+        }    
     }
 }
 
