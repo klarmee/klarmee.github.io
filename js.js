@@ -38,7 +38,7 @@ function onscrub() {
 }
 
 function onzoom(e) {
-    if (window.visualViewport.scale > 1 || (e.touches !== undefined && e.touches.length > 1)) {
+    if (window.visualViewport.scale > 1 | (e.touches !== undefined && e.touches.length > 1)) {
         console.log("zoom");
         let hiRes
         hiRes = new Image()
