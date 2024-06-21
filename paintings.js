@@ -15,3 +15,4 @@ function toggleTv() {tv.style.display = tv.style.display == '' ? 'none' : ''}
 window.onscroll = drawframe
 img().onload = drawframe
 window.onclick = toggleTv
+if (window.matchMedia("(min-resolution: 2x)").matches) {Array.from(imgs).forEach(i => i.style.width = i.naturalWidth/2)}
