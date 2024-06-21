@@ -15,7 +15,7 @@ function toggleTv() {tv.style.display = tv.style.display == '' ? 'none' : ''}
 window.onscroll = drawframe
 img().onload = drawframe
 window.onclick = toggleTv
-if (window.matchMedia("(min-resolution: 1x)").matches) {imgs.forEach(img => {
+if (window.matchMedia("(min-resolution: 2x)").matches) {imgs.forEach(img => {
     intervalId = setInterval(() => {
         if (img.naturalWidth > 0) {
             img.style.width = `${img.naturalWidth / 2}px`   
