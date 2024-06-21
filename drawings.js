@@ -1,7 +1,7 @@
 const imgs = Array.from(document.querySelectorAll('img'))
 function img() { return imgs[i()] }
-function i() { return Math.round(window.scrollY * imgs.length / y()) }
-function y() { return document.body.offsetHeight - document.body.clientHeight }
+function i() { return Math.round((window.scrollY * imgs.length / y()) - .25) }
+function y() { return document.body.offsetHeight }
 
 window.onclick = toggleTv
 

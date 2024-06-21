@@ -1,6 +1,6 @@
 const imgs = Array.from(document.querySelectorAll('img'))
-function y() {return document.body.offsetHeight - document.body.clientHeight}
-function i() {return Math.round(window.scrollY * imgs.length / y())}
+function y() {return document.body.offsetHeight}
+function i() {return Math.round((window.scrollY * (imgs.length) / y()) - .25)}
 function img() {return imgs[i()]}
 function drawframe() {
     if (img().complete) {
