@@ -2,3 +2,8 @@ body{background:red;color:white;}
 a{color:white;}
 ul,ol{padding:0 0 0 1em;list-style-position: inside;}
 ul{list-style:none;}
+hr{
+    all: unset;
+    display: block;
+    margin-bottom: 1em;
+}
