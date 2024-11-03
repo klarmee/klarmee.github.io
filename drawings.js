@@ -1,6 +1,9 @@
+// Calculate the scroll percentage (0 at the top, 1 at the bottom)
+function scrollPercent(){return Math.min(Math.max(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight), 0), 1)}
+
 const imgs = Array.from(document.querySelectorAll('img'))
 function img() { return imgs[i()] }
-function i() { return Math.round((window.scrollY * imgs.length / y()) - .25) }
+function i() { return Math.round(((window.scrollY + window.innerHeight * scrollPercent()) * imgs.length / y()) - .25) }
 function y() { return document.body.offsetHeight }
 
 window.onclick = toggleTv

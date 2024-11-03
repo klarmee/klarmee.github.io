@@ -8,6 +8,7 @@ function drawframe() {
             tv.width = img().naturalWidth
             tv.height = img().naturalHeight
             tv.getContext("2d").drawImage(img(), 0, 0, img().naturalWidth, img().naturalHeight)
+            counter.innerHTML = i() + 1
         }) 
     }
 }
