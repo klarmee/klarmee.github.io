@@ -5,22 +5,32 @@ function img() {return imgs[i()]}
 function drawframe() {
     if (img().complete) {
         requestAnimationFrame(() => {
-            tv.width = img().naturalWidth
-            tv.height = img().naturalHeight
-            tv.getContext("2d").drawImage(img(), 0, 0, img().naturalWidth, img().naturalHeight)
+            canvas.width = img().naturalWidth
+            canvas.height = img().naturalHeight
+            canvas.getContext("2d").drawImage(img(), 0, 0, img().naturalWidth, img().naturalHeight)
             counter.innerHTML = i() + 1
         }) 
     }
 }
-function toggleTv() {tv.style.display = tv.style.display == '' ? 'none' : ''}
+function toggleCanvas() { canvas.style.display = canvas.style.display == '' ? 'none' : '' }
 window.onscroll = drawframe
 img().onload = drawframe
-window.onclick = toggleTv
-if (window.matchMedia("(min-resolution: 2x)").matches) {imgs.forEach(img => {
-    intervalId = setInterval(() => {
-        if (img.naturalWidth > 0) {
-            img.style.width = `${img.naturalWidth / 2}px`   
-            clearInterval(intervalId) 
-        }
-    }, 10)
-    })}
+window.addEventListener('click', (e) => {
+    if (e.target.tagName !== 'A') toggleCanvas()
+})
+
+if (window.matchMedia("(min-resolution: 2x)").matches) {
+    const waitForLoad = img => 
+      new Promise(resolve => img.onload = resolve);
+    
+    const setWidth = img => img.style.width = `${img.naturalWidth / 2}px`;
+    
+    for (const img of imgs) {
+      if (img.complete && img.naturalWidth > 0) {
+        setWidth(img);
+      } else {
+        setWidth(img)
+        waitForLoad(img).then(() => setWidth(img));
+      }
+    }
+  }

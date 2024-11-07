@@ -1,4 +1,4 @@
-body{background:red;color:white;font-size:1.3em;font-family: sans-serif;}
+body{background:red;color:white;font-size:1.2em;font-family: sans-serif;font-weight:bold;}
 a{color:white;}
 ul,ol{padding:0 0 0 1em;list-style-position: inside;}
 ul{list-style:none;}
@@ -7,3 +7,6 @@ hr{
     display: block;
     margin-bottom: 1em;
 }
+a[href^="#"]:focus {
+    outline: none;
+  }
