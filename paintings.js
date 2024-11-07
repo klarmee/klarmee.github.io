@@ -15,6 +15,7 @@ function drawframe() {
 function toggleCanvas() { canvas.style.display = canvas.style.display == '' ? 'none' : '' }
 window.onscroll = drawframe
 img().onload = drawframe
+if (img().complete && img().naturalWidth > 0) drawframe()
 window.addEventListener('click', (e) => {
     if (e.target.tagName !== 'A') toggleCanvas()
 })
