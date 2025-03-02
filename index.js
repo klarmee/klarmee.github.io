@@ -1,21 +1,26 @@
 const canvas = document.querySelector('canvas');
 const canvasWrapper = document.querySelector('#canvaswrapper');
-const canvasWrapperBackground = document.querySelector('#canvaswrapperBackground');
+const canvasbackground = document.querySelector('#canvasbackground');
+const closeButton = document.querySelector('#closebutton');
 const keys = document.querySelector('#keys');
-const touchwrap = document.querySelector('#touchwrap');
+const touchsvg = document.querySelector('#touchsvg');
 const keyswrap = document.querySelector('#keyswrap');
 const hintWrap = document.querySelector('#hintWrap');
+const optionswrap = document.querySelector('#optionswrap');
 const paintings = document.querySelector('#paintings');
 const drawings = document.querySelector('#drawings');
+const optionsresult = document.querySelector('#optionsresult')
+const loadall = document.querySelector('#loadall')
 const imageArray = [];
 let scrollable = document.documentElement.scrollHeight - window.innerHeight
 let currentIndex = null;
 let hinting = false;
+let showingOptions = false;
 let displayedHint = false;
 let mobile = false;
 let previousScale = 1;
 let scrollPosition = null;
-
+let loadingall = false;
 
 
 
@@ -24,22 +29,28 @@ let scrollPosition = null;
 
 
 Array.from(document.querySelectorAll('img')).forEach((thumbnail, index) => {
+    let retryCount = 0;
+    const maxRetries = 3;
+
     imageArray.push({
         lo: {
             img: thumbnail,
             src: thumbnail.src,
+            srcset: thumbnail.srcset,
             loading: true,
             loaded: false
         },
         med: {
             img: null,
             src: thumbnail.src.replace('150', '800'),
+            srcset: thumbnail.srcset.replace('150', '800'),
             loading: false,
             loaded: false
         },
         hi: {
             img: null,
             src: thumbnail.src.replace('150', 'hi'),
+            srcset: thumbnail.srcset.replace('150', 'hi'),
             loading: false,
             loaded: false
         }
@@ -55,6 +66,20 @@ Array.from(document.querySelectorAll('img')).forEach((thumbnail, index) => {
             imageArray[index].lo.loaded = true;
         };
     }
+    thumbnail.onerror = () => {
+        imageArray[index].lo.loading = true;
+        imageArray[index].lo.loaded = false;
+
+        if (retryCount < maxRetries) {
+            retryCount++;
+            setTimeout(() => {
+                thumbnail.src = thumbnail.src; // Reset the src attribute to reload the image
+            }, 100); // Delay in milliseconds (1 second in this example)
+            console.error(`Trying to load image after ${retryCount} retries.`);
+        } else {
+            console.error(`Failed to load image after ${maxRetries} retries.`);
+        }
+    };
     thumbnail.dataIndex = index;
 });
 
@@ -86,17 +111,105 @@ function handleClick(e) {
     if (e.target.tagName === 'IMG') {
         e.preventDefault();
         currentIndex = e.target.dataIndex
-        e.target.parentElement.style.backgroundImage = `url(${e.target.src})`
-        e.target.addEventListener('animationend', removeClass)
+        e.target.addEventListener('transitionend', removeClass)
         e.target.classList.add('clicked');
 
         startPreview()
     }
     if (e.target.tagName === 'CANVAS') {
-        // show options to download, open in new tab, or close
+        loadDraw('hi')
+        optionswrap.classList.add('display')
+        showingOptions = true
     }
-    if (e.target.id === 'close') endPreview();
-    
+    if (e.target.id === 'optionswrap') {
+        optionswrap.classList.remove('display')
+        showingOptions = false
+    }
+    if (e.target.id === 'copyimg') {
+        copyImage()
+    }
+    if (e.target.id === 'downloadimg') {
+        downloadimg()
+    }
+    if (e.target.id === 'copyurl') {
+        copyUrl()
+    }
+    if (e.target.id === 'closebutton') {
+        optionswrap.classList.remove('display')
+        showingOptions = false
+        endPreview();
+    }
+    // if (e.target.id === 'loadall') {
+    //     if (!loadingall) {
+    //         e.target.style.color = 'transparent'
+    //         e.target.blur()
+    //         const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color');
+    //         e.target.style.backgroundImage = `linear-gradient(to right, ${bgColor} 0%, ${bgColor} 0%, transparent 0%)`; // Initialize gradient
+    //         e.target.style.backgroundSize = '100% 100%'; // Set background size to 100%
+
+
+    //         const totalImages = document.querySelectorAll('img').length;
+    //         let loadedImages = 0;
+
+
+    //         Array.from(document.querySelectorAll('img')).forEach((thumbnail, index) => {
+    //             let retryCount = 0;
+    //             const maxRetries = 3;
+    //             const newSrc = thumbnail.src.replace('150/', 'hi/');
+    //             const newSrcSet = thumbnail.srcset.replace('150/', 'hi/');
+    //             const newImage = new Image();
+    //             newImage.src = newSrc;
+    //             newImage.srcset = newSrcSet;
+    //             imageArray[index].med.img = newImage
+
+
+    //             if (newImage.complete) {
+    //                 imageArray[index].med.loading = false;
+    //                 imageArray[index].med.loaded = true;
+    //                 loadedImages++
+
+
+    //                 const progress = (loadedImages / totalImages) * 100;
+    //                 e.target.style.backgroundImage = `linear-gradient(to right, ${bgColor} 0%, ${bgColor} ${progress}%, transparent ${progress}%)`; // Update gradient
+
+
+    //                 if (loadedImages === totalImages) {
+    //                     e.target.innerHTML = 'Loaded';
+    //                     e.target.style.backgroundImage = `linear-gradient(to right, ${bgColor} 0%, ${bgColor} 100%)`; // Set final gradient color
+    //                 }
+    //             } else {
+    //                 // If the image is not loaded, set the onload event
+    //                 newImage.onload = () => {
+    //                     imageArray[index].med.loading = false;
+    //                     imageArray[index].med.loaded = true;
+    //                     loadedImages++
+
+
+    //                     const progress = (loadedImages / totalImages) * 100;
+    //                     e.target.style.backgroundImage = `linear-gradient(to right, ${bgColor} 0%, ${bgColor} ${progress}%, transparent ${progress}%)`; // Update gradient
+    //                 };
+    //             }
+
+
+    //             newImage.onerror = () => {
+    //                 imageArray[index].med.loading = true;
+    //                 imageArray[index].med.loaded = false;
+
+
+    //                 if (retryCount < maxRetries) {
+    //                     retryCount++;
+    //                     setTimeout(() => {
+    //                         newImage.src = newImage.src; // Reset the src attribute to reload the image
+    //                     }, 100); // Delay in milliseconds (1 second in this example)
+    //                     console.error(`Trying to load image after ${retryCount} retries.`);
+    //                 } else {
+    //                     console.error(`Failed to load image after ${maxRetries} retries.`);
+    //                 }
+    //             };
+    //         });
+    //     }
+    //     loadingall = true;
+    // }
 }
 
 function handleFirstScroll(e) {
@@ -105,16 +218,17 @@ function handleFirstScroll(e) {
         window.addEventListener('scroll', handleScroll);
         scrollPosition = window.scrollY;
         document.body.style.visibility = 'hidden'
-        console.log('scrolling to ',Math.round(scrollable * currentIndex / imageArray.length), 'index ',currentIndex)
+        console.log('scrolling to ', Math.round(scrollable * currentIndex / imageArray.length), 'index ', currentIndex)
         scrollTo(0, Math.round(currentIndex * scrollable / imageArray.length));
-        console.log('scrolled to ',window.scrollY)
-        document.body.style.visibility = ''    
+        console.log('scrolled to ', window.scrollY)
+        document.body.style.visibility = ''
     }
 }
 
 function startPreview() {
     canvasWrapper.classList.add('display')
-    canvasWrapperBackground.classList.add('display')
+    canvasbackground.classList.add('display')
+    closeButton.classList.add('display')
 
     if (mobile) {
         hintWrap.addEventListener('animationend', handleFirstScroll)
@@ -147,9 +261,10 @@ function endPreview() {
     }
 
     canvasWrapper.classList.remove('display')
-    canvasWrapperBackground.classList.remove('display')
+    canvasbackground.classList.remove('display')
+    closeButton.classList.remove('display')
     img.classList.add('unclicked');
-    img.addEventListener('animationend', removeClass)
+    img.addEventListener('transitionend', removeClass)
 }
 
 
@@ -171,6 +286,7 @@ function loadDraw(res = 'med', i = currentIndex) {
         if (!image['img']?.complete) {
             const newImage = new Image();
             newImage.src = image['src'];
+            newImage.srcset = image['srcset'];
             image['img'] = newImage;
             image['loading'] = true;
 
@@ -179,6 +295,11 @@ function loadDraw(res = 'med', i = currentIndex) {
                 image['loaded'] = true;
                 drawCurrentImage();
             };
+
+            newImage.onerror = () => {
+                console.log('error loading ' + image)
+            };
+
         } else {
             drawCurrentImage();
         }
@@ -234,7 +355,13 @@ function handleKeydown(e) {
     }
 
     if (e.key === "Escape") {
-        endPreview();
+        e.preventDefault()
+        if (!hinting && !showingOptions) endPreview()
+        if (showingOptions) {
+            optionswrap.classList.remove('display')
+            showingOptions = false
+        }
+        if (hinting) endHint()
     }
 }
 
@@ -297,18 +424,20 @@ function startHint() {
     if (!displayedHint) {
         displayedHint = true;
         hintWrap.classList.add('display')
-        if (mobile) touchwrap.classList.add('display')
+        if (mobile) touchsvg.classList.add('display')
         else keyswrap.classList.add('display')
-        hintWrap.addEventListener('animationend', endHint)
+        hintWrap.addEventListener('animationend', (event) => {
+            if ([...hintWrap.children].includes(event.target)) {
+                endHint();
+            }
+        });
+        hinting = true
     }
 }
 
 function endHint(e) {
-    e.stopPropagation()
-    if (e.target.parentElement == hintWrap) {
-        Array.from(hintWrap.children).forEach(child => child.removeEventListener('animationend', endHint))
-        hintWrap.remove();
-    }
+    hintWrap.remove();
+    hinting = false
 }
 
 
@@ -337,4 +466,61 @@ function scrollPercent() {
 function removeClass(e) {
     e.target.className = "";
     e.target.removeEventListener(e.type, removeClass)
+}
+
+// download img
+
+function downloadimg() {
+    const url = imageArray[currentIndex].hi.src;
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = '';
+        link.click();
+        showResult('downloaded');
+      });
+  }
+
+function getFileExtension(url) {
+    const urlParts = url.split('.');
+    return urlParts[urlParts.length - 1].toLowerCase();
+}
+
+function copyImage() {
+    // load med or hi
+    let img = imageArray[currentIndex].med.img
+    if (imageArray[currentIndex].hi.img.complete && imageArray[currentIndex].hi.img.naturalWidth !== 0) {
+        img = imageArray[currentIndex].hi.img
+    }
+    // Create a canvas element to draw the image
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+
+    // Get the canvas data URL
+    canvas.toBlob((blob) => {
+        navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
+            .then(() => showResult('copied'))
+            .catch(() => showResult('failed'));
+    }, 'image/png');
+}
+
+function copyUrl() {
+    const url = imageArray[currentIndex].hi.src;
+    navigator.clipboard.writeText(url)
+        .then(() => showResult('copied'))
+        .catch(() => showResult('failed'));
+}
+
+function showResult(message) {
+    optionswrap.classList.remove('display');
+    optionsresult.innerHTML = message;
+    optionsresult.classList.add('display');
+    optionsresult.addEventListener('animationend', () => {
+        optionsresult.classList.remove('display');
+    }, { once: true });
 }
