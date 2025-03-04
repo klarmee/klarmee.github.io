@@ -41,19 +41,20 @@ with open(INPUT_FILE, 'w') as file:
 # Generate links HTML
 links_html = ''
 for div_id in div_ids:
-    links_html += f'<li><a href="{div_id}">{div_id}</a></li>'
-print(links_html)
+    links_html += f' | <a href="{div_id}">{div_id}</a>'
 # Write noscript.html
 with open('noscript.html', 'w') as file:
     file.write(f"""
-    <html>
+    <html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Kevin Larmee</title>
     </head>
     <body>
+        <a href="index.html">rich version</a>
+        {links_html}
         <h1>Kevin Larmee</h1>
-        <a href="index.html">enable css and javascript</a>
-        <ul>{links_html}</ul>
     </body>
     </html>
     """)
@@ -84,8 +85,10 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
     links_html = ' | '.join([f'<a href="../{other_div_id}">{other_div_id}</a>' for other_div_id in div_ids])
 
     html_content = f"""
-    <html>
+    <html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Kevin Larmee {div_id}</title>
     </head>
     <body>
@@ -123,8 +126,10 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
             links_html += f'<a href="{img_counter+1}.html">Next</a>'
 
         new_page_html = f"""
-        <html>
+        <html lang="en">
         <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Kevin Larmee {div_id} {img_counter}</title>
         </head>
         <body>
