@@ -41,7 +41,7 @@ with open(INPUT_FILE, 'w') as file:
 # Generate links HTML
 links_html = ''
 for div_id in div_ids:
-    links_html += f' | <a href="{div_id}">{div_id}</a>'
+    links_html += f'<a href="{div_id}">{div_id}</a><br>'
 # Write noscript.html
 with open('noscript.html', 'w') as file:
     file.write(f"""
@@ -52,9 +52,10 @@ with open('noscript.html', 'w') as file:
         <title>Kevin Larmee</title>
     </head>
     <body>
-        <a href="index.html">rich version</a>
+    <h1>Kevin Larmee</h1>
+        <a href="index.html">rich index</a><br>
+        html index<br>
         {links_html}
-        <h1>Kevin Larmee</h1>
     </body>
     </html>
     """)
@@ -122,6 +123,7 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
         links_html += f'<a href="index.html">{div_id}</a> | '
         if img_counter > 1:
             links_html += f'<a href="{img_counter-1}.html">Previous</a> | '
+        links_html += f'{img_counter} | '
         if img_counter < len(div.find_all('img')):
             links_html += f'<a href="{img_counter+1}.html">Next</a>'
 
@@ -133,8 +135,7 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
             <title>Kevin Larmee {div_id} {img_counter}</title>
         </head>
         <body>
-            <a href="../noscript.html">Kevin Larmee</a> | {links_html}
-            <h1>{img_counter}</h1>
+            <a href="../noscript.html">Kevin Larmee</a> | {links_html}<br>
             {a_tag}
         </body>
         </html>

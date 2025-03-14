@@ -1,4 +1,7 @@
-const canvas = document.querySelector('canvas');
+const canvas150 = document.querySelector('#canvas150');
+const canvas800 = document.querySelector('#canvas800');
+const canvasHi = document.querySelector('#canvashi');
+const canvases = document.querySelectorAll('canvas')
 const canvasWrapper = document.querySelector('#canvaswrapper');
 const canvasbackground = document.querySelector('#canvasbackground');
 const closeButton = document.querySelector('#closebutton');
@@ -11,86 +14,98 @@ const options = document.querySelector('#options');
 const result = document.querySelector('#result');
 const paintings = document.querySelector('#paintings');
 const drawings = document.querySelector('#drawings');
-const totalScrollHeight = document.documentElement.scrollHeight - window.innerHeight
+const main = document.querySelector('main');
 const imageArray = [];
 let mobile = null;
 let currentIndex = null;
 let firstTime = true;
 let previousScale = 1;
-let zooming = false;
+let previousPosition = null;
+
 
 // create imageArray
 Array.from(document.querySelectorAll('img')).forEach((thumbnail, index) => {
-    thumbnail.dataIndex = index; // set index
-    imageArray.push({
-        lo: {
-            img: thumbnail,
-            srcset: thumbnail.srcset,
-            src: thumbnail.src,
-            loading: true,
-            loaded: false
-        },
-        med: {
-            img: null,
-            srcset: thumbnail.srcset.replace('150', '800'),
-            src: thumbnail.src.replace('150', '800'),
-            loading: false,
-            loaded: false
-        },
-        hi: {
-            img: null,
-            srcset: thumbnail.srcset.replace('150', 'hi'),
-            src: thumbnail.src.replace('150', 'hi'),
-            loading: false,
-            loaded: false
-        }
-    });
-    if (thumbnail.complete) {
-        imageArray[index].lo.loading = false;
-        imageArray[index].lo.loaded = true;
-    }
-    else {
-        thumbnail.onload = () => {
-            imageArray[index].lo.loading = false;
-            imageArray[index].lo.loaded = true;
-        };
-    }
-    // retry on error
-    const maxRetries = 3;
-    let retryCount = 0;
-    thumbnail.onerror = () => {
-        imageArray[index].lo.loading = true;
-        imageArray[index].lo.loaded = false;
-        if (retryCount < maxRetries) {
-            retryCount++;
-            setTimeout(() => {
-                thumbnail.src = thumbnail.src; // Reset the src attribute to reload the image
-            }, 100);
-            console.error(`Trying to load image after ${retryCount} retries.`);
-        } else console.error(`Failed to load image after ${maxRetries} retries.`);
-    };
+    thumbnail.dataIndex = index;
+    imageArray.push({ 150: thumbnail });
+    thumbnail.addEventListener('error', retry, { once: true })
 });
 
 // check device
 document.addEventListener('touchstart', () => mobile = true, { once: true });
 
+function highestRes() {
+    if (imageArray[currentIndex]['hi']?.complete) return imageArray[currentIndex]['hi']
+    if (imageArray[currentIndex]['800']?.complete) return imageArray[currentIndex]['800']
+    if (imageArray[currentIndex]['150']?.complete) return imageArray[currentIndex]['150']
+}
+
+// draw
+function draw() {
+    let img
+    let canvas
+    if (imageArray[currentIndex]['hi']?.complete) {
+        img = imageArray[currentIndex]['hi']
+        canvas = canvasHi
+    }
+    else if (imageArray[currentIndex]['800']?.complete) {
+        img = imageArray[currentIndex]['800']
+        canvas = canvas800
+    }
+    else if (imageArray[currentIndex]['150']?.complete) {
+        img = imageArray[currentIndex]['150']
+        canvas = canvas150
+    }
+
+    requestAnimationFrame(() => {
+        document.querySelector('canvas.display')?.classList.remove('display')
+        canvas.classList.add('display')
+        canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
+        canvas.getContext("2d").drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
+        canvas.getContext("2d").imageSmoothingEnabled = false
+    })
+}
+
+// load
+function load(res = '800', i = currentIndex) {
+    if (!(imageArray[i][res]?.complete)) {
+        const newRes = new Image();
+        newRes.srcset = imageArray[i]['150'].srcset.replace('150', res);
+        newRes.src = imageArray[i]['150'].src.replace('150', res);
+        newRes.addEventListener('load', draw, { once: true })
+        newRes.addEventListener('error', retry, { once: true })
+        imageArray[i][res] = newRes
+    }
+}
+
+function retry(e) {
+    let retryCount = 0;
+    const onError = () => {
+        if (retryCount < 3) {
+            retryCount++;
+            setTimeout(() => {
+                e.target.srcset = e.target.srcset;
+                e.target.src = e.target.src;
+            }, 100);
+        } 
+        else e.target.removeEventListener('error', onError);
+    };
+    e.target.addEventListener('error', onError);
+}
+
 // handle click
 document.addEventListener('click', (e) => {
-    // click on thumbnail
+    // click on img
     if (e.target.tagName === 'IMG') {
         e.preventDefault();
-        const thumbnail = e.target
         // set currentIndex
-        currentIndex = thumbnail.dataIndex
-        // animate thumbnail
-        thumbnail.addEventListener('transitionend', () => thumbnail.className = '', { once: true });
-        thumbnail.classList.add('clicked');
+        currentIndex = e.target.dataIndex
         // show canvas
         display(canvasWrapper)
         display(canvasbackground)
         display(closeButton)
         // update canvas
-        updateCanvas()
+        load()
+        draw()
         // if first time
         if (firstTime) {
             // display hint
@@ -98,6 +113,7 @@ document.addEventListener('click', (e) => {
             if (mobile) display(mobileHint)
             else display(desktopHint)
             // remove hint
+            if (mobile) window.addEventListener('scroll', () => hide(hintwrap), { once: true })
             hint.addEventListener('animationend', (event) => {
                 if ([...hint.children].includes(event.target)) {
                     hide(hintwrap)
@@ -106,22 +122,24 @@ document.addEventListener('click', (e) => {
             firstTime = false;
         }
         // listen for scroll
+        hide(main)
         if (mobile) {
-            scrollTo(0, Math.round(currentIndex * totalScrollHeight / imageArray.length));
-            window.addEventListener('scroll', handleScroll);
+            const totalScrollHeight = document.documentElement.scrollHeight - window.innerHeight // changes if menu bar is open
+            window.scrollTo(0, Math.round(currentIndex * totalScrollHeight / imageArray.length));
+            window.addEventListener('scroll', handleScroll)
+            window.addEventListener('touchstart', handleTouchStart);
         }
-        // listen for keydown
         else {
-            document.body.style.overflowY = 'hidden';
-            window.addEventListener('keydown', handleKeydown);
+            window.addEventListener('keydown', handleKeydown)
+            window.addEventListener('wheel', handleWheel);
         }
-        // listen for zoom
-        window.ontouchmove = window.onwheel = startZoom
+
     }
     // click on canvas
     if (e.target.tagName === 'CANVAS') {
         // display options
-        updateCanvas('hi')
+        load('hi')
+        draw()
         display(optionswrap)
         display(options)
     }
@@ -139,11 +157,7 @@ document.addEventListener('click', (e) => {
     }
     // click 'copy'
     if (e.target.id === 'copyimg') {
-        let img;
-        // find highest loaded resolution
-        if (imageArray[currentIndex].hi.loaded) img = imageArray[currentIndex].hi.img
-        else if (imageArray[currentIndex].med.loaded) img = imageArray[currentIndex].med.img
-        else if (imageArray[currentIndex].lo.loaded) img = imageArray[currentIndex].lo.img
+        const img = highestRes()
         const canvas = document.createElement('canvas');
         canvas.width = img.width;
         canvas.height = img.height;
@@ -156,7 +170,7 @@ document.addEventListener('click', (e) => {
     }
     // click 'copy url'
     if (e.target.id === 'copyurl') {
-        const url = imageArray[currentIndex].hi.src;
+        const url = imageArray[currentIndex]['hi'].src;
         navigator.clipboard.writeText(url)
             .then(() => showResult('copied url'))
             .catch(() => showResult('failed'));
@@ -171,69 +185,13 @@ document.addEventListener('click', (e) => {
     // click canvas wrapper
     if (e.target.id === 'canvaswrapper') hideCanvas();
     // click hint
-    if (e.target.id === 'hintwrap') hide(hint)
+    if (document.getElementById('hintwrap').contains(e.target)) hide(hint);
 })
 
-// update canvas
-function updateCanvas(res = 'med') {
-    // get neighbor images
-    let left = (currentIndex > 0) ? currentIndex - 1 : currentIndex;
-    let right = (currentIndex < imageArray.length - 1) ? currentIndex + 1 : currentIndex;
-    if (res === 'hi') left = right = currentIndex // don't get hiRes neighbors
-    // for each image
-    for (let i = left; i <= right; i++) {
-        console.log(i,imageArray[i])
-        const image = imageArray[i][res];
-        // if it's not loaded and it's not loading
-        if (!image.loaded && !image.loading) {
-            const newImage = new Image();
-            // load it
-            newImage.srcset = image.srcset;
-            newImage.src = image.src;
-            // add it to imageArray
-            image.img = newImage;
-            image.loading = true;
-            // and draw it to canvas
-            newImage.onload = () => {
-                image.loading = false;
-                image.loaded = true;
-                if (imageArray[i].lo.img?.dataIndex == currentIndex) updateCanvas();
-            };
-            newImage.onerror = () => console.error('error loading ' + image);
-        }
-        // if it's loaded and current
-        if (image.loaded && imageArray[i].lo.img?.dataIndex == currentIndex) {
-            let img;
-            // find its highest loaded resolution
-            if (imageArray[currentIndex].hi.loaded) img = imageArray[currentIndex].hi.img
-            else if (imageArray[currentIndex].med.loaded) img = imageArray[currentIndex].med.img
-            else if (imageArray[currentIndex].lo.loaded) img = imageArray[currentIndex].lo.img
-            // and draw it
-            requestAnimationFrame(() => {
-                canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
-                canvas.getContext("2d").drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
-            })
-        }
-    }
-}
 
-requestIdleCallback(() => {
-    for (let i = 0; i < imageArray.length; i++) {
-        const image = imageArray[i].med;
-        if (!image.loaded && !image.loading) {
-            const newImage = new Image();
-            newImage.srcset = image.srcset;
-            newImage.src = image.src;
-            image.img = newImage;
-            image.loading = true;
-            newImage.onload = () => {
-                image.loading = false;
-                image.loaded = true;
-            };
-            newImage.onerror = () => console.error('error loading ' + image);
-        }
-    }
-});
+
+
+
 
 // hide canvas
 function hideCanvas() {
@@ -243,23 +201,20 @@ function hideCanvas() {
     const elCenterY = rect.top + window.scrollY + rect.height / 2;
     const scrollY = elCenterY - windowHeight / 2;
     // remove listeners
-    if (mobile) window.removeEventListener('scroll', handleScroll);
-    else {
-        document.body.style.overflowY = '';
-        window.removeEventListener('keydown', handleKeydown);
-    }
+    window.removeEventListener('scroll', handleScroll);
+    window.removeEventListener('keydown', handleKeydown);
     // scroll to the current image
     window.scrollTo(0, scrollY);
     // cleanup
-    img.addEventListener('transitionend', () => img.className = '', { once: true });
     canvasWrapper.addEventListener('transitionend', () => {
+        const canvas = document.querySelector('canvas.display')
         canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height)
     }, { once: true });
+    display(main)
     // hide canvas
     hide(closeButton)
     hide(canvasWrapper)
     hide(canvasbackground)
-    img.classList.add('unclicked');
 }
 
 // keys
@@ -268,25 +223,28 @@ function handleKeydown(e) {
     if (e.key === "ArrowLeft") {
         if (currentIndex > 0) {
             currentIndex -= 1
-            updateCanvas()
+            load()
+            draw()
         } else hideCanvas();
     }
     if (e.key == "ArrowRight") {
         if (currentIndex < imageArray.length - 1) {
             currentIndex += 1
-            updateCanvas()
+            load()
+            draw()
         } else hideCanvas();
     }
     if (e.key === "Escape") {
         e.preventDefault()
-        if (zooming) endZoom()
-        else hideCanvas()
+        stopZoom()
+        hideCanvas()
         hide(options)
     }
 }
 
 // scroll
 function handleScroll() {
+    const totalScrollHeight = document.documentElement.scrollHeight - window.innerHeight // changes if menu bar is open
     const scrollPercent = Math.min(Math.max(
         window.scrollY / totalScrollHeight
         , 0), 1) // Clamp the value between 0 and 1
@@ -298,36 +256,55 @@ function handleScroll() {
         scrolled / scrollableHeight * imageArray.length
     ), imageArray.length - 1), 0)
     currentIndex = newIndex
-    updateCanvas()
+    window.removeEventListener('touchmove', resetZoom)
+    load()
+    draw()
 }
 
-// start zoom
-function startZoom(e) {
-    if (window.visualViewport.scale > 1 || e.touches?.length > 1) {
-        zooming = true
-        if (canvas.width < document.body.clientWidth) canvas.style.height = canvas.height
-        if (canvas.height < document.body.clientHeight) canvas.style.width = canvas.width
-        updateCanvas('hi')
-        window.removeEventListener('keydown', handleKeydown)
-        window.onscroll = window.ontouchmove = null
-        window.ontouchend = window.onwheel = endZoom
+function handleTouchStart(e) {
+    if (e.touches?.length > 1) {
+        handleTouches()
     }
 }
 
-// end zoom
-function endZoom() {
-    const currentScale = window.visualViewport.scale
-    if (previousScale > currentScale && currentScale < 1.25) {
-        window.visualViewport.scale = previousScale = 1
-        zooming = false;
-        canvas.style.height = ''
-        canvas.style.width = ''
-        updateCanvas()
-        window.ontouchend = null
-        if (mobile) window.onscroll = handleScroll
-        else window.addEventListener('keydown', handleKeydown)
-        window.ontouchmove = window.onwheel = startZoom
-    } else previousScale = currentScale
+function handleTouches() {
+    if (!imageArray[currentIndex]['hi']) load('hi')
+    if (window.visualViewport.scale <= 1) previousPosition = window.scrollY
+    window.removeEventListener('scroll', handleScroll)
+    window.addEventListener('touchmove', resetZoom, { once: true })
+    window.addEventListener('touchend', handleTouchEnd, { once: true })
+}
+
+function handleWheel() {
+    if (window.visualViewport.scale > 1) {
+        const canvas = canvasHi
+        if (canvas.width < document.body.clientWidth) canvas.style.height = canvas.height
+        if (canvas.height < document.body.clientHeight) canvas.style.width = canvas.width
+        load('hi')
+        draw()
+        window.removeEventListener('keydown', handleKeydown)
+        window.addEventListener('wheel', resetZoom, { once: true })
+    }
+}
+
+function resetZoom() {
+    const currentScale = window.visualViewport.scale.toFixed(2)
+    const stoppingZoom = currentScale < 1.2 && currentScale < previousScale
+    previousScale = currentScale
+    if (stoppingZoom) stopZoom()
+}
+
+function handleTouchEnd() {
+    if (window.visualViewport.scale < 1.2) stopZoom()
+    window.removeEventListener('touchmove', resetZoom)
+}
+
+function stopZoom() {
+    document.querySelector('canvas.display').style.height = ''
+    document.querySelector('canvas.display').style.width = ''
+    scrollTo(0, previousPosition)
+    if (mobile) window.addEventListener('scroll', handleScroll)
+    else window.addEventListener('keydown', handleKeydown)
 }
 
 // show result
@@ -338,7 +315,7 @@ function showResult(message) {
     setTimeout(() => {
         hide(optionswrap)
         hide(result)
-      }, 500); // 2000 milliseconds = 2 seconds
+    }, 500); // 2000 milliseconds = 2 seconds
 }
 
 // display
@@ -350,3 +327,15 @@ function display(el) {
 function hide(el) {
     el.classList.remove('display')
 }
+
+// function log(...args) {
+//     const text = args.join(' ');
+//     document.querySelector('#logdiv').innerHTML = text + '<br>' + document.querySelector('#logdiv').innerHTML;
+// }
+
+// window.onerror = function (message, url, lineNumber, colNumber, error) {
+//     const errorElement = document.createElement('div');
+//     errorElement.innerText = `Error: ${message} - ${lineNumber}:${colNumber} - ${error}`;
+//     document.getElementById('logdiv').appendChild(errorElement);
+//     return true;
+// };
