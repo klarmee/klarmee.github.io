@@ -55,19 +55,17 @@ function draw() {
         img = imageArray[currentIndex]['150']
         canvas = canvas150
     }
-
     requestAnimationFrame(() => {
         document.querySelector('canvas.display')?.classList.remove('display')
-        canvas.classList.add('display')
+        setTimeout(canvas.classList.add('display'), 200)
         canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
         canvas.getContext("2d").drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
-        canvas.getContext("2d").imageSmoothingEnabled = false
     })
 }
 
 // load
 function load(res = '800', i = currentIndex) {
-    if (!(imageArray[i][res]?.complete)) {
+    if (!imageArray[i][res]?.complete) {
         const newRes = new Image();
         newRes.srcset = imageArray[i]['150'].srcset.replace('150', res);
         newRes.src = imageArray[i]['150'].src.replace('150', res);
@@ -86,7 +84,7 @@ function retry(e) {
                 e.target.srcset = e.target.srcset;
                 e.target.src = e.target.src;
             }, 100);
-        } 
+        }
         else e.target.removeEventListener('error', onError);
     };
     e.target.addEventListener('error', onError);
@@ -113,7 +111,6 @@ document.addEventListener('click', (e) => {
             if (mobile) display(mobileHint)
             else display(desktopHint)
             // remove hint
-            if (mobile) window.addEventListener('scroll', () => hide(hintwrap), { once: true })
             hint.addEventListener('animationend', (event) => {
                 if ([...hint.children].includes(event.target)) {
                     hide(hintwrap)
@@ -225,6 +222,7 @@ function handleKeydown(e) {
             currentIndex -= 1
             load()
             draw()
+            if (currentIndex > 1) load('800', currentIndex - 1)
         } else hideCanvas();
     }
     if (e.key == "ArrowRight") {
@@ -232,6 +230,7 @@ function handleKeydown(e) {
             currentIndex += 1
             load()
             draw()
+            if (currentIndex < imageArray.length - 2) load('800', currentIndex + 1)
         } else hideCanvas();
     }
     if (e.key === "Escape") {
@@ -257,8 +256,11 @@ function handleScroll() {
     ), imageArray.length - 1), 0)
     currentIndex = newIndex
     window.removeEventListener('touchmove', resetZoom)
+    window.addEventListener('scroll', () => {hide(hintwrap)}, { once: true });
     load()
     draw()
+    if (currentIndex > 1) load('800', currentIndex - 1)
+    if (currentIndex < imageArray.length - 2) load('800', currentIndex + 1)
 }
 
 function handleTouchStart(e) {
