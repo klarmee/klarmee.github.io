@@ -98,6 +98,7 @@ document.addEventListener('click', (e) => {
         // set currentIndex
         currentIndex = e.target.dataIndex
         // show canvas
+        e.target.classList.add('clicked')
         display(canvasWrapper)
         display(canvasbackground)
         display(closeButton)
