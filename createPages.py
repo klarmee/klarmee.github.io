@@ -110,8 +110,8 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
     # --- MODIFIED SECTION ENDS HERE ---
 
 
-    with open(os.path.join(div_id, 'index.html'), 'w') as file:
-        file.write(html_content)
+    # with open(os.path.join(div_id, 'index.html'), 'w') as file:
+    #     file.write(html_content)
 
 # Make image pages
 for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
@@ -131,7 +131,7 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
         a_tag.append(img_tag)
 
         links_html = ''
-        links_html += f'<h2><a href="index.html" style="text-decoration:none;color:#000000">{div_id}</a></h2> | '
+        links_html += f'<h2>{div_id}</h2> | '
         if img_counter > 1:
             links_html += f'<a href="{img_counter-1}.html">Previous</a> | '
         links_html += f'{img_counter} | '
