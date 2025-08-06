@@ -131,26 +131,31 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
         a_tag.append(img_tag)
 
         links_html = ''
-        links_html += f'<h2>{div_id}</h2> | '
         if img_counter > 1:
-            links_html += f'<a href="{img_counter-1}.html">Previous</a> | '
+            links_html += f'<a href="{img_counter-1}.html"><</a> | '
         links_html += f'{img_counter} | '
         if img_counter < len(div.find_all('img')):
-            links_html += f'<a href="{img_counter+1}.html">Next</a>'
+            links_html += f'<a href="{img_counter+1}.html">></a>'
 
         new_page_html = f"""
         <html lang="en">
         <head>
             <meta charset="UTF-8">
             <title>Kevin Larmee {div_id} {img_counter}</title>
+            <style>
+                div a {{
+                    width: 3em;
+                    height: 3em;
+                    text-decoration: none;
+                    vertical-align: bottom;
+                    line-height: 3em;
+                }}
+                img {{
+                    max-width: 100vw;max-height: 100vh;width: auto;height: auto;
+                }}
+            </style>
         </head>
-        <body>
-            <h1><a href="../index.html" style="text-decoration:none;color:#000000">Kevin Larmee</a></h1>
-            {links_html}
-            <script src="../nav.js"></script>
-            <br>
-            {a_tag}
-        </body>
+        <body style="font-size: 3vh;display: flex;margin: 0;height: 100vh;flex-direction: column;"><div style="height: 100%;width: 100%;display: grid;place-items: center;position: absolute;z-index: -1;">{img_tag}</div><div style="text-align: center;display: flex;width: 100%;"><a href="../" style="">^</a></div><div style=" /* Centers content both horizontally and vertically */flex-grow: 2;"></div><div style="text-align: center;display: flex;width: 100%;justify-content: space-between;"><a href="{img_counter-1}.html">&lt;</a><a href="{img_counter+1}.html">&gt;</a></div><script src="../nav.js"></script></body>
         </html>
         """
 
