@@ -30,6 +30,7 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kevin Larmee {div_id} {img_counter}</title>
     <link rel="stylesheet" href="../css.css">
 </head>
