@@ -52,14 +52,15 @@ divsWithLinks.forEach(link => {
 });
 
 // Add a click event listener to the image to navigate to its source.
-const mainImage = document.querySelector('img');
-if (mainImage) {
-  mainImage.addEventListener('click', () => {
-    // Get the source (src) of the image.
-    const imageSrc = mainImage.src;
+const allImages = document.querySelectorAll('img');
+
+allImages.forEach(img => {
+  img.addEventListener('click', () => {
+    // Get the source (src) of the image that was clicked.
+    const imageSrc = img.src;
     if (imageSrc) {
       // Navigate to the full-size image file.
       window.location.href = imageSrc;
     }
   });
-}
+});

@@ -18,11 +18,11 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
             prev += f'<div><a href="{img_counter-1}.html">&lt;</a></div>'
 
         else: 
-            prev += '<div>&ensp;</div>'
+            prev += '<div></div>'
         if img_counter < len(div.find_all('img')):
             next += f'<div><a href="{img_counter+1}.html">&gt;</a></div>'
         else: 
-            next += '<div>&ensp;</div>'
+            next += '<div></div>'
 
 
         new_page_html = f"""
