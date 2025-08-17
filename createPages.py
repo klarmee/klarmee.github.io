@@ -42,7 +42,7 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
         </div>
         {prev}
         <div>
-            <img src="../hi/{img_src}" srcset="../avif/hi/{img_base}.avif">
+            <img src="../hi/{img_src}">
         </div>
         {next}
     </div>
@@ -52,7 +52,7 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
         </div>
         {prev}
         <div>
-            <img src="../hi/{img_src}" srcset="../avif/hi/{img_base}.avif">
+            <img src="../hi/{img_src}">
         </div>
         {next}
     </div>
