@@ -14,7 +14,7 @@
   summary {padding:1em;}
   summary:hover{cursor:pointer;}
   ul {text-align:left;}
-  .selected-painting {margin:5em;}
+  .selected-painting img {max-height:100%;}
 </style>
 </head>
 <body>
@@ -99,16 +99,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const clonedImg = clonedLink.querySelector('img');
 
             if (clonedImg) {
-                clonedImg.style.maxWidth = '100%';
-                clonedImg.style.height = 'auto';
                 clonedImg.removeAttribute('height');
                 clonedImg.removeAttribute('width');
                 clonedImg.style.border = '1px solid black';
-                clonedImg.style.padding = '10px';
                 
                 const currentDataSrc = clonedImg.getAttribute('data-src');
                 if (currentDataSrc) {
-                    clonedImg.src = currentDataSrc.replace('/150/', '/hi/');
+                    clonedImg.src = currentDataSrc.replace('150/', 'hi/');
                 }
             }
             
