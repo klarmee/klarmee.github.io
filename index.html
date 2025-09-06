@@ -24,7 +24,6 @@
   summary {padding:1em;}
   summary:hover{cursor:pointer;}
   ul {text-align:left;}
-  #selected {margin-bottom: 1em;;}
   #selected img {max-height:60vh;margin-bottom:1em;}
 </style>
 </head>
@@ -193,6 +192,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const randomPaintingLink = allPaintingLinks[randomIndex];
             const clonedLink = randomPaintingLink.cloneNode(true);
             const clonedImg = clonedLink.querySelector('img');
+
+            const spanToRemove = clonedLink.querySelector('span');
+            if (spanToRemove) {
+                spanToRemove.remove();
+            }
 
             clonedLink.id = 'selected';
 
