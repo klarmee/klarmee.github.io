@@ -15,12 +15,12 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
         prev = ''
         next = ''
         if img_counter > 1:
-            prev += f'<div><a id="previous" href="{img_counter-1}.html">Previous &#9664;</a></div>'
+            prev += f'<div><a id="previous" href="{img_counter-1}.html"> <svg viewBox="0 0 10 10" style="height:1em;width:1em;fill:currentColor;vertical-align:middle" aria-hidden="true"><path d="M9,4 L5,4 L5,2 L1,5 L5,8 L5,6 L9,6 Z" /></svg> Previous</a></div>'
 
         else: 
             prev += '<div></div>'
         if img_counter < len(div.find_all('img')):
-            next += f'<div><a id="next" href="{img_counter+1}.html">&#9654; Next</a></div>'
+            next += f'<div><a id="next" href="{img_counter+1}.html"><svg viewBox="0 0 10 10" style="height:1em;width:1em;fill:currentColor;vertical-align:middle" aria-hidden="true"><path d="M1,4 L5,4 L5,2 L9,5 L5,8 L5,6 L1,6 Z" /></svg> Next</a></div>'
         else: 
             next += '<div></div>'
 
@@ -38,7 +38,7 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
 <body>
     <div class="landscape">
         <div>
-            <a href="../">&#9650; Home</a>
+            <a href="../"><svg viewBox="0 0 10 10" style="height:1em;width:1em;fill:currentColor;vertical-align:middle" aria-hidden="true"><path d="M1,5 L5,1 L9,5 L8,5 L8,9 L2,9 L2,5 Z" /></svg> Home </a>
         </div>
         {prev}
         <div>
@@ -48,7 +48,7 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
     </div>
     <div class="portrait">
         <div>
-            <a href="../">&#9650; Home</a>
+            <a href="../"><svg viewBox="0 0 10 10" style="height:1em;width:1em;fill:currentColor;vertical-align:middle" aria-hidden="true"><path d="M1,5 L5,1 L9,5 L8,5 L8,9 L2,9 L2,5 Z" /></svg> Home </a>
         </div>
         {prev}
         <div>
