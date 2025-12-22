@@ -15,12 +15,12 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
         prev = ''
         next = ''
         if img_counter > 1:
-            prev += f'<div><a href="{img_counter-1}.html">&lt;</a></div>'
+            prev += f'<div><a id="previous" href="{img_counter-1}.html">Previous &#9664;</a></div>'
 
         else: 
             prev += '<div></div>'
         if img_counter < len(div.find_all('img')):
-            next += f'<div><a href="{img_counter+1}.html">&gt;</a></div>'
+            next += f'<div><a id="next" href="{img_counter+1}.html">&#9654; Next</a></div>'
         else: 
             next += '<div></div>'
 
@@ -38,7 +38,7 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
 <body>
     <div class="landscape">
         <div>
-            <a href="../">^</a>
+            <a href="../">&#9650; Home</a>
         </div>
         {prev}
         <div>
@@ -48,7 +48,7 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
     </div>
     <div class="portrait">
         <div>
-            <a href="../">^</a>
+            <a href="../">&#9650; Home</a>
         </div>
         {prev}
         <div>

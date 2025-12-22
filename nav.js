@@ -13,7 +13,7 @@ document.addEventListener('keydown', (event) => {
   // Check if the key pressed is the left arrow.
   if (event.key === 'ArrowLeft') {
     // Find the link with the text "<"
-    const prevLink = Array.from(document.querySelectorAll('a')).find(link => link.textContent.trim() === '<');
+    const prevLink = document.getElementById('previous')
     if (prevLink) {
       prevLink.click();
     }
@@ -22,7 +22,7 @@ document.addEventListener('keydown', (event) => {
   // Check if the key pressed is the right arrow.
   if (event.key === 'ArrowRight') {
     // Find the link with the text ">"
-    const nextLink = Array.from(document.querySelectorAll('a')).find(link => link.textContent.trim() === '>');
+    const nextLink = document.getElementById('next')
     if (nextLink) {
       nextLink.click();
     }
