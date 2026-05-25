@@ -29,38 +29,53 @@ document.addEventListener('keydown', (event) => {
   }
 });
 
-// Select all divs that contain an <a> tag.
-const divsWithLinks = document.querySelectorAll('div a');
+// // Select all divs that contain an <a> tag.
+// const divsWithLinks = document.querySelectorAll('div a');
 
-divsWithLinks.forEach(link => {
-  // Get the parent div of the link.
-  const parentDiv = link.parentElement;
+// divsWithLinks.forEach(link => {
+//   // Get the parent div of the link.
+//   const parentDiv = link.parentElement;
 
-  // Check if the parent is a div and not null.
-  if (parentDiv && parentDiv.tagName === 'DIV') {
-    // Get the href attribute of the link.
-    const href = link.getAttribute('href');
+//   // Check if the parent is a div and not null.
+//   if (parentDiv && parentDiv.tagName === 'DIV') {
+//     // Get the href attribute of the link.
+//     const href = link.getAttribute('href');
 
-    // Add a click event listener to the parent div.
-    parentDiv.addEventListener('click', () => {
-      if (href) {
-        // Navigate to the link's URL.
-        window.location.href = href;
-      }
+//     // Add a click event listener to the parent div.
+//     parentDiv.addEventListener('click', () => {
+//       if (href) {
+//         // Navigate to the link's URL.
+//         window.location.href = href;
+//       }
+//     });
+//   }
+// });
+
+// // Add a click event listener to the image to navigate to its source.
+// const allImages = document.querySelectorAll('img');
+// allImages.forEach(img => {
+//   img.parentElement.href = "";
+//   img.addEventListener('click', () => {
+//     // Toggle the full-size styling class on the clicked image
+//     img.classList.toggle('full-size');
+//   });
+// });
+
+const imgElement = document.querySelector('img');
+const linkElement = imgElement?.parentElement;
+
+// Ensure both elements exist and the parent is actually an anchor
+if (imgElement && linkElement?.tagName === 'A') {
+    
+    linkElement.addEventListener('click', (e) => {
+        e.preventDefault(); // Stop page navigation
+
+        // If the link still points to the low-res folder, swap it to high-res
+        if (imgElement.src.includes('/800/')) {
+            imgElement.src = linkElement.href.replace('/800/', '/hi/');
+        }
+
+        // Toggle the zoom class on the image
+        imgElement.classList.toggle('full-size');
     });
-  }
-});
-
-// Add a click event listener to the image to navigate to its source.
-const allImages = document.querySelectorAll('img');
-
-allImages.forEach(img => {
-  img.addEventListener('click', () => {
-    // Get the source (src) of the image that was clicked.
-    const imageSrc = img.src;
-    if (imageSrc) {
-      // Navigate to the full-size image file.
-      window.location.href = imageSrc;
-    }
-  });
-});
+}

@@ -8,59 +8,45 @@ with open('index2.html', 'r') as file:
 for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
     div_id = div.get('id')
     img_counter = 1
-    for img in div.find_all('img'):
+    all_imgs = div.find_all('img') # Cache this to avoid re-running find_all
+    total_imgs = len(all_imgs)
+
+    for img in all_imgs:
         img_src = os.path.basename(img['src'])
-        img_base = os.path.splitext(img_src)[0]
 
-        prev = ''
-        next = ''
         if img_counter > 1:
-            prev += f'<div><a id="previous" href="{img_counter-1}.html"> <svg viewBox="0 0 10 10" style="height:1em;width:1em;fill:currentColor;vertical-align:middle" aria-hidden="true"><path d="M9,4 L5,4 L5,2 L1,5 L5,8 L5,6 L9,6 Z" /></svg> Previous</a></div>'
-
+            prev = f'<a id="previous" href="{img_counter-1}.html">previous</a>'
         else: 
-            prev += '<div></div>'
-        if img_counter < len(div.find_all('img')):
-            next += f'<div><a id="next" href="{img_counter+1}.html"><svg viewBox="0 0 10 10" style="height:1em;width:1em;fill:currentColor;vertical-align:middle" aria-hidden="true"><path d="M1,4 L5,4 L5,2 L9,5 L5,8 L5,6 L1,6 Z" /></svg> Next</a></div>'
+            prev = '<br/>'
+
+        if img_counter < total_imgs:
+            next = f'<a id="next" href="{img_counter+1}.html">next</a>'
         else: 
-            next += '<div></div>'
+            next = '<br/>'
 
-
-        new_page_html = f"""
-        <html lang="en">
-
+        # Single, clean HTML structure
+        new_page_html = f"""<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kevin Larmee {div_id} {img_counter}</title>
     <link rel="stylesheet" href="../css.css">
 </head>
-
 <body>
-    <div class="landscape">
-        <div>
-            <a href="../"><svg viewBox="0 0 10 10" style="height:1em;width:1em;fill:currentColor;vertical-align:middle" aria-hidden="true"><path d="M1,5 L5,1 L9,5 L8,5 L8,9 L2,9 L2,5 Z" /></svg> Home </a>
+    <div>
+        <a href="../index.html">Kevin Larmee</a>
+        <div id="image">
+            <a href="../hi/{img_src}"><img src="../800/{img_src}"></a>
         </div>
-        {prev}
-        <div>
-            <img src="../hi/{img_src}">
+        <div class="nav">
+            {prev}
+            {next}
         </div>
-        {next}
-    </div>
-    <div class="portrait">
-        <div>
-            <a href="../"><svg viewBox="0 0 10 10" style="height:1em;width:1em;fill:currentColor;vertical-align:middle" aria-hidden="true"><path d="M1,5 L5,1 L9,5 L8,5 L8,9 L2,9 L2,5 Z" /></svg> Home </a>
-        </div>
-        {prev}
-        <div>
-            <img src="../hi/{img_src}">
-        </div>
-        {next}
     </div>
     <script src="../nav.js"></script>
 </body>
-
-</html>
-        """
+</html>"""
 
         os.makedirs(div_id, exist_ok=True)
         with open(os.path.join(div_id, f'{img_counter}.html'), 'w') as file:
