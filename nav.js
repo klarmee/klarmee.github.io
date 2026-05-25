@@ -61,21 +61,21 @@ document.addEventListener('keydown', (event) => {
 //   });
 // });
 
-const imgElement = document.querySelector('img');
-const linkElement = imgElement?.parentElement;
+// const imgElement = document.querySelector('img');
+// const linkElement = imgElement?.parentElement;
 
-// Ensure both elements exist and the parent is actually an anchor
-if (imgElement && linkElement?.tagName === 'A') {
+// // Ensure both elements exist and the parent is actually an anchor
+// if (imgElement && linkElement?.tagName === 'A') {
     
-    linkElement.addEventListener('click', (e) => {
-        e.preventDefault(); // Stop page navigation
+//     linkElement.addEventListener('click', (e) => {
+//         e.preventDefault(); // Stop page navigation
 
-        // If the link still points to the low-res folder, swap it to high-res
-        if (imgElement.src.includes('/800/')) {
-            imgElement.src = linkElement.href.replace('/800/', '/hi/');
-        }
+//         // If the link still points to the low-res folder, swap it to high-res
+//         if (imgElement.src.includes('/800/')) {
+//             imgElement.src = linkElement.href.replace('/800/', '/hi/');
+//         }
 
-        // Toggle the zoom class on the image
-        imgElement.classList.toggle('full-size');
-    });
-}
+//         // Toggle the zoom class on the image
+//         imgElement.classList.toggle('full-size');
+//     });
+// }
