@@ -44,7 +44,31 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
             {next}
         </div>
     </div>
-    <script src="../nav.js"></script>
+    <script>
+    document.addEventListener('keydown', (event) => {{
+  if (event.ctrlKey || event.shiftKey || event.altKey || event.metaKey) {{
+    return;
+  }}
+
+  if (event.key === 'Escape') {{
+    window.location.href = '../';
+  }}
+
+  if (event.key === 'ArrowLeft') {{
+    const prevLink = document.getElementById('previous')
+    if (prevLink) {{
+      prevLink.click();
+    }}
+  }}
+
+  if (event.key === 'ArrowRight') {{
+    const nextLink = document.getElementById('next')
+    if (nextLink) {{
+      nextLink.click();
+    }}
+  }}
+}});
+    </script>
 </body>
 </html>"""
 
