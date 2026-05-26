@@ -35,7 +35,11 @@ for div in soup.find_all(lambda tag: tag.name == 'div' and tag.get('id'))[:4]:
 </head>
 <body>
     <div>
-        <a href="../index.html">Kevin Larmee</a>
+        <div class="grid">       
+            <a href="../index.html">Kevin Larmee</a>
+            <a href="../paintings.html">paintings</a>
+            <a href="../drawings.html">drawings</a>
+        </div>
         <div id="image">
             <a href="../hi/{img_src}"><img src="../800/{img_src}"></a>
         </div>
