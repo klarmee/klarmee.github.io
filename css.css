@@ -1,5 +1,5 @@
 body {
-  margin: 0 0 3em 0;
+  margin-bottom: 3em; 
   line-height: 1.3em;
 }
 
@@ -46,7 +46,7 @@ img {
 }
 
 #image img {
-  max-width: calc(100vw - 2em);
+  max-width: 100%;
 }
 
 #image {
